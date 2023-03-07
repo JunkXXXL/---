@@ -1,6 +1,23 @@
 ﻿#include <iostream>
 #include <fstream>
 
+bool createFileWithNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue)
+{
+
+    return false;
+}
+
+void sortFile(const std::string& fileName)
+{
+
+}
+
+bool isFileContainsSortedArray(const std::string& fileName)
+{
+
+    return false;
+}
+
 int createAndSortFile(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
     if (!createFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
