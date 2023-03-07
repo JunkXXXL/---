@@ -37,32 +37,39 @@ void Merge(const std::string& fileName, int p)
     }
 
     short pointer = 0;
-    double Anumber, Bnumber;
+    int Anumber, Bnumber;
     fls[0] >> Anumber; fls[1] >> Bnumber;
     while (fls[0] && fls[1])
     {
         if (Anumber < Bnumber)
         {
-            Ffile << Anumber;
-            fls[0] >> Anumber;
+            for (int i = 0; i < p && fls[0]; i++)
+            {
+                Ffile << Anumber << " ";
+                fls[0] >> Anumber;
+            }
         }
         else
         {
-            Ffile << Bnumber;
-            fls[1] >> Bnumber;
+            for (int i = 0; i < p && fls[1]; i++)
+            {
+                Ffile << Bnumber << " ";
+                fls[1] >> Bnumber;
+            }
+
         }
     }
 
     while (fls[0])
     {
+        Ffile << Anumber << " ";
         fls[0] >> Anumber;
-        Ffile << Anumber;
     }
 
     while (fls[1])
     {
+        Ffile << Bnumber << " ";
         fls[1] >> Bnumber;
-        Ffile << Bnumber;
     }
 
     fls[0].close(); fls[1].close(); Ffile.close();
@@ -83,27 +90,26 @@ bool Separate(const std::string& fileName, int p)
     }
 
     int pointer = 0;
-    double number;
-    while (Ffile)
+    int number;
+    while (Ffile >> number)
     {
-        for (int i = 0; i < p; i++)
-        {
-            Ffile >> number;  fls[pointer % 2] << number;
-        }
+        fls[pointer / p % 2] << number << " ";
         pointer++;
     }
 
-    if (!fls[0] || !fls[1])
+    fls[0].close(); fls[1].close(); Ffile.close();
+    delete[] fls;
+
+    std::ifstream f2; f2.open("Bfile.txt");
+    if (f2 >> number)
     {
-        fls[0].close(); fls[1].close(); Ffile.close();
-        delete[] fls;
-        Merge(fileName, p);
-        return true;
+        f2.close();
+        return false;
     }
     else {
-        fls[0].close(); fls[1].close(); Ffile.close();
-        delete[] fls;
-        return false;
+        f2.close();
+        Merge(fileName, p);
+        return true;
     }
 }
 
@@ -147,9 +153,9 @@ bool isFileContainsSortedArray(const std::string& fileName)
 
 int createAndSortFile(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
-    if (!createFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
-        return -1;
-    }
+    //if (!createFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
+    //    return -1;
+    //}
 
     sortFile(fileName); //Вызов вашей функции сортировки
 
@@ -163,7 +169,7 @@ int createAndSortFile(const std::string& fileName, const int numbersCount, const
 int main()
 {
     std::string fileName = "file.txt";
-    const int numbersCount = 100;
+    const int numbersCount = 10;
     const int maxNumberValue = 100000;
 
     for (int i = 0; i < 1; i++) {
