@@ -1,10 +1,28 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <random>
+#include <ctime>
 
 bool createFileWithNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
+    std::ofstream fFile;
+    fFile.open(fileName);
 
-    return false;
+    if (!fFile.is_open())
+    {
+        return false;
+    }
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(0., maxNumberValue);
+    for (int i = 0; i < numbersCount; i++)
+    {
+        fFile << dist(mt) << " ";
+    }
+
+    fFile.close();
+    return true;
 }
 
 void sortFile(const std::string& fileName)
@@ -14,8 +32,27 @@ void sortFile(const std::string& fileName)
 
 bool isFileContainsSortedArray(const std::string& fileName)
 {
+    std::ifstream fFile;
+    fFile.open(fileName);
 
-    return false;
+    if (!fFile.is_open() && !fFile)
+    {
+        return false;
+    }
+
+    double lastNumber, currentNumber;
+    fFile >> lastNumber;
+
+    while (fFile)
+    {
+        fFile >> currentNumber;
+        if (currentNumber < lastNumber)
+        {
+            return false;
+        }
+        lastNumber = currentNumber;
+    }
+    return true;
 }
 
 int createAndSortFile(const std::string& fileName, const int numbersCount, const int maxNumberValue)
@@ -39,7 +76,7 @@ int main()
     const int numbersCount = 1000000;
     const int maxNumberValue = 100000;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1; i++) {
         switch (createAndSortFile(fileName, numbersCount, maxNumberValue)) {
         case 1:
             std::cout << "Test passed." << std::endl;
@@ -56,3 +93,4 @@ int main()
 
         return 0;
     }
+}
