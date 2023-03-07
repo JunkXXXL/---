@@ -48,6 +48,11 @@ void Merge(const std::string& fileName, int p)
                 Ffile << Anumber << " ";
                 fls[0] >> Anumber;
             }
+            for (int i = 0; i < p && fls[1]; i++)
+            {
+                Ffile << Bnumber << " ";
+                fls[1] >> Bnumber;
+            }
         }
         else
         {
@@ -56,7 +61,11 @@ void Merge(const std::string& fileName, int p)
                 Ffile << Bnumber << " ";
                 fls[1] >> Bnumber;
             }
-
+            for (int i = 0; i < p && fls[0]; i++)
+            {
+                Ffile << Anumber << " ";
+                fls[0] >> Anumber;
+            }
         }
     }
 
