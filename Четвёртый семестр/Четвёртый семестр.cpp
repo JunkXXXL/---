@@ -36,37 +36,45 @@ void Merge(const std::string& fileName, int p)
         return;
     }
 
-    short pointer = 0;
+    int i, j;
+
     int Anumber, Bnumber;
     fls[0] >> Anumber; fls[1] >> Bnumber;
+    
     while (fls[0] && fls[1])
     {
-        if (Anumber < Bnumber)
+        i = j = 0;
+
+        while (fls[0] && fls[1] && i < p && j < p)
         {
-            for (int i = 0; i < p && fls[0]; i++)
+            if (Anumber < Bnumber)
             {
                 Ffile << Anumber << " ";
                 fls[0] >> Anumber;
+                i += 1;
             }
-            for (int i = 0; i < p && fls[1]; i++)
+            else
             {
                 Ffile << Bnumber << " ";
                 fls[1] >> Bnumber;
+                j += 1;
             }
         }
-        else
+
+        while (fls[0] && i < p)
         {
-            for (int i = 0; i < p && fls[1]; i++)
-            {
-                Ffile << Bnumber << " ";
-                fls[1] >> Bnumber;
-            }
-            for (int i = 0; i < p && fls[0]; i++)
-            {
-                Ffile << Anumber << " ";
-                fls[0] >> Anumber;
-            }
+            Ffile << Anumber << " ";
+            fls[0] >> Anumber;
+            i += 1;
         }
+
+        while (fls[1] && j < p)
+        {
+            Ffile << Bnumber << " ";
+            fls[1] >> Bnumber;
+            j += 1;
+        }
+
     }
 
     while (fls[0])
@@ -122,16 +130,37 @@ bool Separate(const std::string& fileName, int p)
     }
 }
 
+bool _checkSecondFile()
+{
+    std::ifstream secFl; secFl.open("Bfile.txt");
+    int A;
+    secFl >> A;
+    if (secFl) 
+    {
+        secFl.close();
+        return true;
+    }
+    else
+    {
+        secFl.close();
+        return false;
+    }
+}
+
 void sortFile(const std::string& fileName)
 {
     int p = 1;
-    while (!Separate(fileName, p))
+
+    Separate(fileName, p);
+
+    while (_checkSecondFile())
     {
+        Separate(fileName, p);
         Merge(fileName, p);
         p = p * 2;
         std::cout << p << " ";
     }
-    
+
 }
 
 bool isFileContainsSortedArray(const std::string& fileName)
@@ -162,9 +191,9 @@ bool isFileContainsSortedArray(const std::string& fileName)
 
 int createAndSortFile(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
-    //if (!createFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
-    //    return -1;
-    //}
+    if (!createFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
+        return -1;
+    }
 
     sortFile(fileName); //Вызов вашей функции сортировки
 
@@ -178,7 +207,7 @@ int createAndSortFile(const std::string& fileName, const int numbersCount, const
 int main()
 {
     std::string fileName = "file.txt";
-    const int numbersCount = 10;
+    const int numbersCount = 100000;
     const int maxNumberValue = 100000;
 
     for (int i = 0; i < 1; i++) {
