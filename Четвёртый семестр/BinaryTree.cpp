@@ -74,14 +74,15 @@ int BinaryTree::nodeCount(Node* usel) const
 	return count;
 }
 
-BinaryTree::BinaryTree(BinaryTree* tree)
-{
-	
-}
-
 BinaryTree::BinaryTree(int root_key)
 {
 	_root = new Node(root_key);
+}
+
+BinaryTree::~BinaryTree()
+{
+	clean(_root);
+	delete _root;
 }
 
 int BinaryTree::sumKeys() const
@@ -100,9 +101,20 @@ int BinaryTree::sumKeys() const
 	return to_ret;
 }
 
-void BinaryTree::print() const
+void BinaryTree::printLeaf() const
 {
-	
+	if (_root->left != nullptr)
+	{
+		printLeaf(_root->left);
+	}
+	if (_root->right != nullptr)
+	{
+		printLeaf(_root->right);
+	}
+	if (_root->left == nullptr && _root->right == nullptr)
+	{
+		std::cout << _root->key;
+	}
 }
 
 const Node* BinaryTree::getRoot() const
@@ -137,6 +149,22 @@ void BinaryTree::clean(Node* usel)
 	{
 		clean(usel->right);
 		delete usel->right;
+	}
+}
+
+void BinaryTree::printLeaf(Node* usel) const
+{
+	if (usel->left != nullptr)
+	{
+		printLeaf(usel->left);
+	}
+	if (usel->right != nullptr)
+	{
+		printLeaf(usel->right);
+	}
+	if (usel->left == nullptr && usel->right == nullptr)
+	{
+		std::cout << usel->key << " ";
 	}
 }
 

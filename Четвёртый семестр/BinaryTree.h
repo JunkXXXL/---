@@ -1,6 +1,7 @@
 #pragma once
 #include "Node.h"
 #include <vector>
+#include <iostream>
 
 class BinaryTree
 {
@@ -13,6 +14,7 @@ private:
 	int nodeCount(Node* usel) const;
 	int getHigth(Node* usel) const;
 	void clean(Node* usel);
+	void printLeaf(Node* usel) const;
 
 public:
 
@@ -39,6 +41,6 @@ public:
 	int getNodesLevel(Node * usel) const;
 	std::vector<int>& getVector(Node* usel = nullptr) const;
 	void print() const;
-	void printLeaf(Node* usel = nullptr) const;
+	void printLeaf() const;
 
 };
