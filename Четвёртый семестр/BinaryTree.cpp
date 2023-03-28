@@ -46,3 +46,13 @@ void BinaryTree::print() const
 {
 	
 }
+
+const Node* BinaryTree::getRoot() const
+{
+	return _root;
+}
+
+bool BinaryTree::isEmpty()
+{
+	return _root;
+}

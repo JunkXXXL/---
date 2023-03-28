@@ -7,6 +7,8 @@ class BinaryTree
 private:
 	Node* _root = nullptr;
 
+	int sumKeys(Node* nd) const;
+
 public:
 
 	BinaryTree() {_root = nullptr; }
@@ -18,9 +20,9 @@ public:
 	bool deleteNode();
 	Node& findNode();
 
-	Node* getRoot() const;
+	const Node* getRoot() const;
 	void clean(Node* usel = nullptr);
-	bool isEmpty(Node* usel = nullptr);
+	bool isEmpty();
 	int getHigth(Node* usel = nullptr) const;
 	BinaryTree& copyUnderTree(Node* usel = nullptr);
 	int nodeCount(Node* usel = nullptr) const;
