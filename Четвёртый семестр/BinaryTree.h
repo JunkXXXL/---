@@ -9,8 +9,10 @@ private:
 
 	int sumKeys(Node* nd) const;
 	int maxKey(Node* usel) const;
-	int minKey(Node* usel = nullptr) const;
-	int nodeCount(Node* usel = nullptr) const;
+	int minKey(Node* usel) const;
+	int nodeCount(Node* usel) const;
+	int getHigth(Node* usel) const;
+	void clean(Node* usel);
 
 public:
 
@@ -24,9 +26,9 @@ public:
 	Node& findNode();
 
 	const Node* getRoot() const;
-	void clean(Node* usel = nullptr);
+	void clean();
 	bool isEmpty();
-	int getHigth(Node* usel = nullptr) const;
+	int getHigth() const;
 	BinaryTree& copyUnderTree(Node* usel = nullptr);
 	int nodeCount() const;
 	int maxKey() const;

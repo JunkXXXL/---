@@ -110,9 +110,71 @@ const Node* BinaryTree::getRoot() const
 	return _root;
 }
 
+void BinaryTree::clean()
+{
+	if (_root->left != nullptr)
+	{
+		clean(_root->left);
+		delete _root->left;
+	}
+	if (_root->right != nullptr)
+	{
+		clean(_root->right);
+		delete _root->right;
+	}
+	delete _root;
+	_root = new Node(0);
+}
+
+void BinaryTree::clean(Node* usel)
+{
+	if (usel->left != nullptr)
+	{
+		clean(usel->left);
+		delete usel->left;
+	}
+	if (usel->right != nullptr)
+	{
+		clean(usel->right);
+		delete usel->right;
+	}
+}
+
 bool BinaryTree::isEmpty()
 {
 	return _root;
+}
+
+int BinaryTree::getHigth(Node* usel) const
+{
+	int rightHight = 0;
+	int leftHight = 0;
+	if (usel->left != nullptr)
+	{
+		rightHight += getHigth(usel->left);
+	}
+	if (usel->right != nullptr)
+	{
+		leftHight += getHigth(usel->right);
+	}
+
+	return (rightHight > leftHight) ? rightHight : leftHight;
+}
+
+int BinaryTree::getHigth() const
+{
+	int rightHight = 0;
+	int leftHight = 0;
+	if (_root->left != nullptr)
+	{
+		rightHight += getHigth(_root->left);
+	}
+	if (_root->right != nullptr)
+	{
+		leftHight += getHigth(_root->right);
+	}
+
+	return (rightHight > leftHight) ? rightHight : leftHight;
 }
 
 int BinaryTree::nodeCount() const
