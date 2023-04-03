@@ -1,0 +1,72 @@
+#include "BinaryTreeIterator.h"
+#include <stack>
+
+BinaryTreeIterator::BinaryTreeIterator(BinaryTree *tree)
+{
+	_tree = tree->getRoot();
+	_head = tree->getRoot();
+	_treeHigth = tree->getHigth();
+}
+
+bool BinaryTreeIterator::exists() const
+{
+	if (_tree == nullptr) return false;
+	else return true;
+}
+
+int BinaryTreeIterator::value() const
+{
+	if (exists()) return _tree->getKey();
+	else throw "Binary Tree is not exist";
+}
+
+bool BinaryTreeIterator::hasNext() const
+{
+	return false;
+}
+
+void BinaryTreeIterator::moveToNext()
+{
+	int elements = (2 << _treeHigth - 1);
+	_position++;
+
+	_tree = _head;
+	std::stack<bool> wayToNext;
+
+	if (_position < elements - 1)
+	{
+		bool toStack;
+		bool toward; //0 - left   1 - right
+
+		for (int pos = _position; pos != 0; pos = (pos % 2) ? pos / 2 : (pos / 2 - 1))
+		{
+			toStack = !(pos % 2);
+			wayToNext.push(toStack);
+		}
+
+		while (!wayToNext.empty())
+		{
+			toward = wayToNext.top();
+			wayToNext.pop();
+
+			if (toward == true && _tree != nullptr)
+			{
+				_tree = _tree->right;
+			}
+			else if (toward == false && _tree != nullptr)
+			{
+				_tree = _tree->left;
+			}
+			else
+			{
+				moveToNext();
+				break;
+			}
+
+		}
+	}
+	else
+	{
+		_tree = nullptr;
+	}
+}
