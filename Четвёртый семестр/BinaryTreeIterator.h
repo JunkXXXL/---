@@ -6,12 +6,12 @@
 class BinaryTreeIterator : public Iterator
 {
 public:
+    BinaryTreeIterator(const BinaryTree *tree);
     BinaryTreeIterator(BinaryTree *tree);
     ~BinaryTreeIterator() override = default;
 
     bool exists() const override;
     int value() const override;
-    bool hasNext() const override;
     void moveToNext() override;
 
 private:
