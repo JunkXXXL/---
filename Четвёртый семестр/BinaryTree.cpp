@@ -1,4 +1,7 @@
 #include "BinaryTree.h"
+#include <random>
+#include <time.h>
+#include "BinaryTreeIterator.h"
 
 int BinaryTree::sumKeys(Node* nd) const
 {
@@ -101,6 +104,30 @@ int BinaryTree::sumKeys() const
 	return to_ret;
 }
 
+std::vector<int> BinaryTree::getVector(Node* usel) const
+{
+	std::vector<int> to_ret;
+	BinaryTreeIterator iter(this);
+
+	while (iter.exists())
+	{
+		to_ret.push_back(iter.value());
+		iter.moveToNext();
+	}
+	return to_ret;
+}
+
+void BinaryTree::print() const
+{
+	BinaryTreeIterator iter(this);
+	
+	while (iter.exists())
+	{
+		std::cout << iter.value() << " ";
+		iter.moveToNext();
+	}
+}
+
 void BinaryTree::printLeaf() const
 {
 	if (_root->left != nullptr)
@@ -175,15 +202,15 @@ bool BinaryTree::isEmpty()
 
 int BinaryTree::getHigth(Node* usel) const
 {
-	int rightHight = 0;
-	int leftHight = 0;
+	int rightHight = 1;
+	int leftHight = 1;
 	if (usel->left != nullptr)
 	{
-		rightHight += getHigth(usel->left);
+		leftHight += getHigth(usel->left);
 	}
 	if (usel->right != nullptr)
 	{
-		leftHight += getHigth(usel->right);
+		rightHight += getHigth(usel->right);
 	}
 
 	return (rightHight > leftHight) ? rightHight : leftHight;
@@ -191,15 +218,15 @@ int BinaryTree::getHigth(Node* usel) const
 
 int BinaryTree::getHigth() const
 {
-	int rightHight = 0;
-	int leftHight = 0;
+	int rightHight = 1;
+	int leftHight = 1;
 	if (_root->left != nullptr)
 	{
-		rightHight += getHigth(_root->left);
+		leftHight += getHigth(_root->left);
 	}
 	if (_root->right != nullptr)
 	{
-		leftHight += getHigth(_root->right);
+		rightHight += getHigth(_root->right);
 	}
 
 	return (rightHight > leftHight) ? rightHight : leftHight;
@@ -261,4 +288,66 @@ int BinaryTree::minKey() const
 		}
 	}
 	return min;
+}
+
+void BinaryTree::addNodeRandomly(Node* usel, int value)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	Node* pointer = usel;
+	bool switcher = gen() % 2;
+	if (switcher)
+	{
+		if (pointer->right != nullptr)
+		{
+			addNodeRandomly(pointer->right, value);
+		}
+		else
+		{
+			pointer->right = new Node(value);
+		}
+	}
+	else
+	{
+		if (pointer->left != nullptr)
+		{
+			addNodeRandomly(pointer->left, value);
+		}
+		else
+		{
+			pointer->left = new Node(value);
+		}
+	}
+}
+
+void BinaryTree::addNodeRandomly(int value)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	Node* pointer = _root;
+	int switcher = gen() % 2;
+	if (switcher)
+	{
+		if (pointer->right != nullptr)
+		{
+			addNodeRandomly(pointer->right, value);
+		}
+		else
+		{
+			pointer->right = new Node(value);
+		}
+	}
+	else
+	{
+		if (pointer->left != nullptr)
+		{
+			addNodeRandomly(pointer->left, value);
+		}
+		else
+		{
+			pointer->left = new Node(value);
+		}
+	}
 }

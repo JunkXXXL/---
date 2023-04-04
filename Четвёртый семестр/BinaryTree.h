@@ -15,6 +15,7 @@ private:
 	int getHigth(Node* usel) const;
 	void clean(Node* usel);
 	void printLeaf(Node* usel) const;
+	void addNodeRandomly(Node* usel, int value);
 
 public:
 
@@ -25,7 +26,7 @@ public:
 	
 	void addNode();
 	bool deleteNode();
-	Node& findNode();
+	const Node& findNode() const;
 
 	const Node* getRoot() const;
 	void clean();
@@ -35,11 +36,11 @@ public:
 	int nodeCount() const;
 	int maxKey() const;
 	int minKey() const;
-	void addNodeRandomly(Node* usel = nullptr);
+	void addNodeRandomly(int value);
 	bool isBalance(Node* usel = nullptr) const;
 	int sumKeys() const;
 	int getNodesLevel(Node * usel) const;
-	std::vector<int>& getVector(Node* usel = nullptr) const;
+	std::vector<int> getVector(Node* usel = nullptr) const;
 	void print() const;
 	void printLeaf() const;
 
