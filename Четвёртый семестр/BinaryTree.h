@@ -24,7 +24,7 @@ private:
 	void printLeaf(Node* node) const;
 	void addNodeRandomly(Node* node, int value);
 	ChildsInfo isBalance(Node* node) const;
-	void print(const Node* root, int marginLeft, int levelSpacing) const;
+	void print(Node* root, int marginLeft, int levelSpacing) const;
 
 public:
 
@@ -53,6 +53,6 @@ public:
 	std::vector<int> getVector() const;
 	void printLeaf() const;
 	BinaryTree& operator=(BinaryTree& other);
-	void print(int marginLeft = 2, int levelSpacing = 1);
+	void print() const;
 
 };

@@ -108,7 +108,7 @@ std::vector<int> BinaryTree::getVector() const
 	return to_ret;
 }
 
-void BinaryTree::print(const Node* root, int marginLeft, int levelSpacing) const
+void BinaryTree::print(Node* root, int marginLeft, int levelSpacing) const
 {
 
 		if (root == nullptr) {
@@ -118,6 +118,11 @@ void BinaryTree::print(const Node* root, int marginLeft, int levelSpacing) const
 		std::cout << std::string(marginLeft, ' ') << root->key << std::endl;
 		print(root->left, marginLeft + levelSpacing, levelSpacing);
 
+}
+
+void BinaryTree::print() const
+{
+	print(_root, 1, 1);
 }
 
 const Node* BinaryTree::findNode(int value) const
