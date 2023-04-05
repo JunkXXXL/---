@@ -13,6 +13,7 @@ public:
     bool exists() const override;
     int value() const override;
     void moveToNext() override;
+    const Node* getNode();
 
 private:
     const Node* _head = nullptr;

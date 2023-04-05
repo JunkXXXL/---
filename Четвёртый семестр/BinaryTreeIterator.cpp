@@ -5,14 +5,14 @@ BinaryTreeIterator::BinaryTreeIterator(const BinaryTree *tree)
 {
 	_tree = tree->getRoot();
 	_head = tree->getRoot();
-	_treeHigth = tree->getHigth();
+	_treeHigth = tree->getHeigth();
 }
 
 BinaryTreeIterator::BinaryTreeIterator(BinaryTree* tree)
 {
 	_tree = tree->getRoot();
 	_head = tree->getRoot();
-	_treeHigth = tree->getHigth();
+	_treeHigth = tree->getHeigth();
 }
 
 bool BinaryTreeIterator::exists() const
@@ -71,4 +71,9 @@ void BinaryTreeIterator::moveToNext()
 	{
 		_tree = nullptr;
 	}
+}
+
+const Node* BinaryTreeIterator::getNode()
+{
+	return _tree;
 }

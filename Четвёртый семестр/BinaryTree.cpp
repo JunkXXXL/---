@@ -3,21 +3,12 @@
 #include <time.h>
 #include "BinaryTreeIterator.h"
 
-int BinaryTree::sumKeys(Node* nd) const
+struct ChildsInfo
 {
-	int to_ret = 0;
-
-	if (nd->left != nullptr)
-	{
-		to_ret += sumKeys(nd->left);
-	}
-	if (nd->right != nullptr)
-	{
-		to_ret += sumKeys(nd->right);
-	}
-
-	return to_ret;
-}
+	int leftChild = 0;
+	int rightChild = 0;
+	Node* node = nullptr;
+};
 
 int BinaryTree::maxKey(Node* usel) const
 {
@@ -63,18 +54,14 @@ int BinaryTree::minKey(Node* usel) const
 	return min;
 }
 
-int BinaryTree::nodeCount(Node* usel) const
+BinaryTree::BinaryTree(BinaryTree* tree)
 {
-	int count = 1;
-	if (usel->left != nullptr)
-	{
-		count += nodeCount(usel->left);
-	}
-	if (usel->right != nullptr)
-	{
-		count += nodeCount(usel->right);
-	}
-	return count;
+	_root = new Node(tree->_root);
+}
+
+BinaryTree::BinaryTree(Node* nd)
+{
+	_root = nd;
 }
 
 BinaryTree::BinaryTree(int root_key)
@@ -84,27 +71,32 @@ BinaryTree::BinaryTree(int root_key)
 
 BinaryTree::~BinaryTree()
 {
-	clean(_root);
+	clear(_root);
 	delete _root;
 }
 
-int BinaryTree::sumKeys() const
+int BinaryTree::sumKeys(Node* nd) const
 {
 	int to_ret = 0;
 
-	if (_root->left != nullptr)
+	if (nd->left != nullptr)
 	{
-		to_ret += sumKeys(_root->left);
+		to_ret += sumKeys(nd->left);
 	}
-	if (_root->right != nullptr)
+	if (nd->right != nullptr)
 	{
-		to_ret += sumKeys(_root->right);
+		to_ret += sumKeys(nd->right);
 	}
 
 	return to_ret;
 }
 
-std::vector<int> BinaryTree::getVector(Node* usel) const
+int BinaryTree::sumKeys() const
+{
+	return sumKeys(_root);
+}
+
+std::vector<int> BinaryTree::getVector(Node* node) const
 {
 	std::vector<int> to_ret;
 	BinaryTreeIterator iter(this);
@@ -128,20 +120,19 @@ void BinaryTree::print() const
 	}
 }
 
-void BinaryTree::printLeaf() const
+const Node* BinaryTree::findNode(int value) const
 {
-	if (_root->left != nullptr)
+	BinaryTreeIterator iter(this);
+
+	while (iter.exists())
 	{
-		printLeaf(_root->left);
+		if (iter.value() == value)
+		{
+			return iter.getNode();
+		}
+		iter.moveToNext();
 	}
-	if (_root->right != nullptr)
-	{
-		printLeaf(_root->right);
-	}
-	if (_root->left == nullptr && _root->right == nullptr)
-	{
-		std::cout << _root->key;
-	}
+	return nullptr;
 }
 
 const Node* BinaryTree::getRoot() const
@@ -149,34 +140,41 @@ const Node* BinaryTree::getRoot() const
 	return _root;
 }
 
-void BinaryTree::clean()
+void BinaryTree::clear() //clear
 {
-	if (_root->left != nullptr)
-	{
-		clean(_root->left);
-		delete _root->left;
-	}
-	if (_root->right != nullptr)
-	{
-		clean(_root->right);
-		delete _root->right;
-	}
-	delete _root;
-	_root = new Node(0);
+	clear(_root);
+	_root->key = 0;
 }
 
-void BinaryTree::clean(Node* usel)
+void BinaryTree::clear(Node* node)
 {
-	if (usel->left != nullptr)
+	if (node->left != nullptr)
 	{
-		clean(usel->left);
-		delete usel->left;
+		clear(node->left);
+		delete node->left;
 	}
-	if (usel->right != nullptr)
+	if (node->right != nullptr)
 	{
-		clean(usel->right);
-		delete usel->right;
+		clear(node->right);
+		delete node->right;
 	}
+}
+
+void BinaryTree::printLeaf() const
+{
+	printLeaf(_root);
+}
+
+BinaryTree& BinaryTree::operator=(BinaryTree& other)
+{
+	if (other._root != _root)
+	{
+		clear();
+		delete _root;
+		_root = new Node(other._root);
+	}
+
+	return *this;
 }
 
 void BinaryTree::printLeaf(Node* usel) const
@@ -200,94 +198,61 @@ bool BinaryTree::isEmpty()
 	return _root;
 }
 
-int BinaryTree::getHigth(Node* usel) const
+int BinaryTree::getHeigth(Node* usel) const
 {
 	int rightHight = 1;
 	int leftHight = 1;
 	if (usel->left != nullptr)
 	{
-		leftHight += getHigth(usel->left);
+		leftHight += getHeigth(usel->left);
 	}
 	if (usel->right != nullptr)
 	{
-		rightHight += getHigth(usel->right);
+		rightHight += getHeigth(usel->right);
 	}
 
 	return (rightHight > leftHight) ? rightHight : leftHight;
 }
 
-int BinaryTree::getHigth() const
+int BinaryTree::getHeigth() const
 {
-	int rightHight = 1;
-	int leftHight = 1;
-	if (_root->left != nullptr)
-	{
-		leftHight += getHigth(_root->left);
-	}
-	if (_root->right != nullptr)
-	{
-		rightHight += getHigth(_root->right);
-	}
-
-	return (rightHight > leftHight) ? rightHight : leftHight;
+	return getHeigth(_root);
 }
 
-int BinaryTree::nodeCount() const
+BinaryTree BinaryTree::copyUnderTree(Node* usel)
+{
+	BinaryTree to_ret(new Node(usel));
+	
+	return to_ret;
+}
+
+int BinaryTree::nodeCount(Node* node) const
 {
 	int count = 1;
-	if (_root->left != nullptr)
+	if (node->left != nullptr)
 	{
-		count += nodeCount(_root->left);
+		count += nodeCount(node->left);
 	}
-	if (_root->right != nullptr)
+	if (node->right != nullptr)
 	{
-		count += nodeCount(_root->right);
+		count += nodeCount(node->right);
 	}
 	return count;
 }
 
+int BinaryTree::nodeCount() const
+{
+	return nodeCount(_root);
+}
+
 int BinaryTree::maxKey() const
 {
-	int max = _root->key;
-	if (_root->left != nullptr)
-	{
-		int newMAX = maxKey(_root->left);
-		if (newMAX > max) 
-		{
-			max = newMAX;
-		}
-	}
-	if (_root->right != nullptr)
-	{
-		int newMAX = maxKey(_root->right);
-		if (newMAX > max)
-		{
-			max = newMAX;
-		}
-	}
-	return max;
+	return maxKey(_root);
 }
 
 int BinaryTree::minKey() const
 {
-	int min = _root->key;
-	if (_root->left != nullptr)
-	{
-		int newMIN = minKey(_root->left);
-		if (newMIN < min)
-		{
-			min = newMIN;
-		}
-	}
-	if (_root->right != nullptr)
-	{
-		int newMIN = minKey(_root->right);
-		if (newMIN < min)
-		{
-			min = newMIN;
-		}
-	}
-	return min;
+	return minKey(_root);
 }
 
 void BinaryTree::addNodeRandomly(Node* usel, int value)
@@ -323,31 +288,5 @@ void BinaryTree::addNodeRandomly(Node* usel, int value)
 
 void BinaryTree::addNodeRandomly(int value)
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-
-	Node* pointer = _root;
-	int switcher = gen() % 2;
-	if (switcher)
-	{
-		if (pointer->right != nullptr)
-		{
-			addNodeRandomly(pointer->right, value);
-		}
-		else
-		{
-			pointer->right = new Node(value);
-		}
-	}
-	else
-	{
-		if (pointer->left != nullptr)
-		{
-			addNodeRandomly(pointer->left, value);
-		}
-		else
-		{
-			pointer->left = new Node(value);
-		}
-	}
+	addNodeRandomly(_root, value);
 }

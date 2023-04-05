@@ -4,7 +4,7 @@ class Node
 
 private:
 
-	Node* left = nullptr, * right = nullptr, * pred = nullptr;
+	Node* left = nullptr, * right = nullptr;
 	int key;
 
 public:
@@ -18,5 +18,6 @@ public:
 	int getChildrenCount() const;
 
 	friend class BinaryTree;
+	friend class BinaryTreeIterator;
 };
 
