@@ -3,27 +3,20 @@
 #include <time.h>
 #include "BinaryTreeIterator.h"
 
-struct ChildsInfo
+int BinaryTree::maxKey(Node* node) const
 {
-	int leftChild = 0;
-	int rightChild = 0;
-	bool answer = true;
-};
-
-int BinaryTree::maxKey(Node* usel) const
-{
-	int max = usel->key;
-	if (usel->left != nullptr)
+	int max = node->key;
+	if (node->left != nullptr)
 	{
-		int newMAX = maxKey(usel->left);
+		int newMAX = maxKey(node->left);
 		if (newMAX > max)
 		{
 			max = newMAX;
 		}
 	}
-	if (usel->right != nullptr)
+	if (node->right != nullptr)
 	{
-		int newMAX = maxKey(usel->right);
+		int newMAX = maxKey(node->right);
 		if (newMAX > max)
 		{
 			max = newMAX;
@@ -32,20 +25,20 @@ int BinaryTree::maxKey(Node* usel) const
 	return max;
 }
 
-int BinaryTree::minKey(Node* usel) const
+int BinaryTree::minKey(Node* node) const
 {
-	int min = usel->key;
-	if (usel->left != nullptr)
+	int min = node->key;
+	if (node->left != nullptr)
 	{
-		int newMIN = minKey(usel->left);
+		int newMIN = minKey(node->left);
 		if (newMIN < min)
 		{
 			min = newMIN;
 		}
 	}
-	if (usel->right != nullptr)
+	if (node->right != nullptr)
 	{
-		int newMIN = minKey(usel->right);
+		int newMIN = minKey(node->right);
 		if (newMIN < min)
 		{
 			min = newMIN;
@@ -115,15 +108,16 @@ std::vector<int> BinaryTree::getVector() const
 	return to_ret;
 }
 
-void BinaryTree::print() const
+void BinaryTree::print(const Node* root, int marginLeft, int levelSpacing) const
 {
-	BinaryTreeIterator iter(this);
-	
-	while (iter.exists())
-	{
-		std::cout << iter.value() << " ";
-		iter.moveToNext();
-	}
+
+		if (root == nullptr) {
+			return;
+		}
+		print(root->right, marginLeft + levelSpacing, levelSpacing);
+		std::cout << std::string(marginLeft, ' ') << root->key << std::endl;
+		print(root->left, marginLeft + levelSpacing, levelSpacing);
+
 }
 
 const Node* BinaryTree::findNode(int value) const

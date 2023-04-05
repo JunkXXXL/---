@@ -3,6 +3,13 @@
 #include <vector>
 #include <iostream>
 
+struct ChildsInfo
+{
+	int leftChild = 0;
+	int rightChild = 0;
+	bool answer = true;
+};
+
 class BinaryTree
 {
 private:
@@ -16,6 +23,8 @@ private:
 	void clear(Node* node);
 	void printLeaf(Node* node) const;
 	void addNodeRandomly(Node* node, int value);
+	ChildsInfo isBalance(Node* node) const;
+	void print(const Node* root, int marginLeft, int levelSpacing) const;
 
 public:
 
@@ -38,13 +47,12 @@ public:
 	int maxKey() const;
 	int minKey() const;
 	void addNodeRandomly(int value);
-	ChildsInfo isBalance(Node* node = nullptr) const;
 	bool isBalance() const;
 	int sumKeys() const;
 	int getNodeLevel(Node * node) const;
 	std::vector<int> getVector() const;
-	void print() const;
 	void printLeaf() const;
 	BinaryTree& operator=(BinaryTree& other);
+	void print(int marginLeft = 2, int levelSpacing = 1);
 
 };
