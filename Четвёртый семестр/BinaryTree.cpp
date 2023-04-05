@@ -7,7 +7,7 @@ struct ChildsInfo
 {
 	int leftChild = 0;
 	int rightChild = 0;
-	Node* node = nullptr;
+	bool answer = true;
 };
 
 int BinaryTree::maxKey(Node* usel) const
@@ -96,7 +96,13 @@ int BinaryTree::sumKeys() const
 	return sumKeys(_root);
 }
 
-std::vector<int> BinaryTree::getVector(Node* node) const
+int BinaryTree::getNodeLevel(Node* node) const
+{
+	int nowHeight = getHeigth(node);
+	return getHeigth() - nowHeight;
+}
+
+std::vector<int> BinaryTree::getVector() const
 {
 	std::vector<int> to_ret;
 	BinaryTreeIterator iter(this);
@@ -289,4 +295,33 @@ void BinaryTree::addNodeRandomly(Node* usel, int value)
 void BinaryTree::addNodeRandomly(int value)
 {
 	addNodeRandomly(_root, value);
+}
+
+ChildsInfo BinaryTree::isBalance(Node* node) const
+{
+	ChildsInfo inf;
+	if (node->left != nullptr)
+	{
+		ChildsInfo inf1 = isBalance(node->left);
+		inf.leftChild += inf1.leftChild;
+		inf.rightChild += inf1.rightChild;
+	}
+	if (node->right != nullptr)
+	{
+		ChildsInfo inf2 = isBalance(node->right);
+		inf.leftChild += inf2.leftChild;
+		inf.rightChild += inf2.rightChild;
+	}
+
+	if (abs(inf.leftChild - inf.rightChild) > 1)
+	{
+		inf.answer = false;
+	}
+	return inf;
+}
+
+bool BinaryTree::isBalance() const
+{
+	ChildsInfo answer = isBalance(_root);
+	return answer.answer;
 }

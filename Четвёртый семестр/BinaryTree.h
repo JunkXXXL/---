@@ -9,13 +9,13 @@ private:
 	Node* _root = nullptr;
 
 	int sumKeys(Node* node) const;
-	int maxKey(Node* usel) const;
-	int minKey(Node* usel) const;
-	int nodeCount(Node* usel) const;
-	int getHeigth(Node* usel) const;
-	void clear(Node* usel);
-	void printLeaf(Node* usel) const;
-	void addNodeRandomly(Node* usel, int value);
+	int maxKey(Node* node) const;
+	int minKey(Node* node) const;
+	int nodeCount(Node* node) const;
+	int getHeigth(Node* node) const;
+	void clear(Node* node);
+	void printLeaf(Node* node) const;
+	void addNodeRandomly(Node* node, int value);
 
 public:
 
@@ -33,15 +33,16 @@ public:
 	void clear();
 	bool isEmpty();
 	int getHeigth() const;
-	BinaryTree copyUnderTree(Node* usel = nullptr);
+	BinaryTree copyUnderTree(Node* node = nullptr);
 	int nodeCount() const;
 	int maxKey() const;
 	int minKey() const;
 	void addNodeRandomly(int value);
-	bool isBalance(Node* usel = nullptr) const;
+	ChildsInfo isBalance(Node* node = nullptr) const;
+	bool isBalance() const;
 	int sumKeys() const;
-	int getNodesLevel(Node * usel) const;
-	std::vector<int> getVector(Node* usel = nullptr) const;
+	int getNodeLevel(Node * node) const;
+	std::vector<int> getVector() const;
 	void print() const;
 	void printLeaf() const;
 	BinaryTree& operator=(BinaryTree& other);
