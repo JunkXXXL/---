@@ -125,6 +125,120 @@ void BinaryTree::print() const
 	print(_root, 1, 1);
 }
 
+bool BinaryTree::deleteNode(Node* node)
+{
+	if (node->getChildrenCount() == 0)
+	{
+		BinaryTreeIterator iter(this);
+		while (iter.exists())
+		{
+			if (iter.getNode()->left == node)
+			{
+				delete iter.getNode()->left;
+				iter.getNode()->left = nullptr;
+				return true;
+			}
+			if (iter.getNode()->right == node)
+			{
+				delete iter.getNode()->right;
+				iter.getNode()->right = nullptr;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	else if (node->getChildrenCount() == 1)
+	{
+		BinaryTreeIterator iter(this);
+		while (iter.exists())
+		{
+			if (iter.getNode()->left == node)
+			{
+				Node* toDel = iter.getNode()->left;
+				if (iter.getNode()->left->left != nullptr)
+				{
+					iter.getNode()->left = iter.getNode()->left->left;
+				}
+				else
+				{
+					iter.getNode()->left = iter.getNode()->left->right;
+				}
+				
+				delete toDel;
+				
+				return true;
+			}
+			if (iter.getNode()->right == node)
+			{
+				Node* toDel = iter.getNode()->right;
+				if (iter.getNode()->right->left != nullptr)
+				{
+					iter.getNode()->right = iter.getNode()->right->left;
+				}
+				else
+				{
+					iter.getNode()->right = iter.getNode()->right->right;
+				}
+
+				delete toDel;
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	else
+	{
+		BinaryTreeIterator iter(this);
+		while (iter.exists())
+		{
+			if (iter.getNode()->left == node)
+			{
+				Node* toDel = iter.getNode()->left;
+				Node* replaceNode = iter.getNode()->left;
+				Node* toReplace = nullptr;
+				while (replaceNode->left != nullptr)
+				{
+					replaceNode = replaceNode->left;
+					if (replaceNode->left->left == nullptr)
+					{
+						toReplace = replaceNode->left;
+						replaceNode->left = nullptr;
+						toReplace->left = iter.getNode()->left->left;
+						toReplace->right = iter.getNode()->left->right;
+					}
+				}
+				delete toDel;
+				iter.getNode()->left = toReplace;
+			}
+			if (iter.getNode()->right == node)
+			{
+				Node* toDel = iter.getNode()->right;
+				Node* replaceNode = iter.getNode()->right;
+				Node* toReplace = nullptr;
+				while (replaceNode->right != nullptr)
+				{
+					replaceNode = replaceNode->right;
+					if (replaceNode->right->right == nullptr)
+					{
+						toReplace = replaceNode->right;
+						replaceNode->right = nullptr;
+						toReplace->left = iter.getNode()->right->left;
+						toReplace->right = iter.getNode()->right->right;
+					}
+				}
+				delete toDel;
+				iter.getNode()->right = toReplace;
+			}
+		}
+		return false;
+	}
+
+	return false;
+}
+
 const Node* BinaryTree::findNode(int value) const
 {
 	BinaryTreeIterator iter(this);
@@ -140,7 +254,7 @@ const Node* BinaryTree::findNode(int value) const
 	return nullptr;
 }
 
-const Node* BinaryTree::getRoot() const
+Node* BinaryTree::getRoot() const
 {
 	return _root;
 }
@@ -296,31 +410,29 @@ void BinaryTree::addNodeRandomly(int value)
 	addNodeRandomly(_root, value);
 }
 
-ChildsInfo BinaryTree::isBalance(Node* node) const
+int BinaryTree::isBalance(Node* node) const
 {
-	ChildsInfo inf;
+	int inf = 0;
 	if (node->left != nullptr)
 	{
-		ChildsInfo inf1 = isBalance(node->left);
-		inf.leftChild += inf1.leftChild;
-		inf.rightChild += inf1.rightChild;
+		inf += isBalance(node->left);
+	}
+	else
+	{
+		inf += 1;
 	}
 	if (node->right != nullptr)
 	{
-		ChildsInfo inf2 = isBalance(node->right);
-		inf.leftChild += inf2.leftChild;
-		inf.rightChild += inf2.rightChild;
+		inf -= isBalance(node->right);
 	}
-
-	if (abs(inf.leftChild - inf.rightChild) > 1)
+	else
 	{
-		inf.answer = false;
+		inf -= 1;
 	}
 	return inf;
 }
 
 bool BinaryTree::isBalance() const
 {
-	ChildsInfo answer = isBalance(_root);
-	return answer.answer;
+	return isBalance(_root);
 }

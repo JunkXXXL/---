@@ -3,13 +3,6 @@
 #include <vector>
 #include <iostream>
 
-struct ChildsInfo
-{
-	int leftChild = 0;
-	int rightChild = 0;
-	bool answer = true;
-};
-
 class BinaryTree
 {
 private:
@@ -23,7 +16,7 @@ private:
 	void clear(Node* node);
 	void printLeaf(Node* node) const;
 	void addNodeRandomly(Node* node, int value);
-	ChildsInfo isBalance(Node* node) const;
+	int isBalance(Node* node) const;
 	void print(Node* root, int marginLeft, int levelSpacing) const;
 
 public:
@@ -35,10 +28,10 @@ public:
 	~BinaryTree();
 	
 	void addNode();
-	bool deleteNode();
+	bool deleteNode(Node* node);
 	const Node* findNode(int value) const;
 
-	const Node* getRoot() const;
+	Node* getRoot() const;
 	void clear();
 	bool isEmpty();
 	int getHeigth() const;
