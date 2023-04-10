@@ -333,6 +333,19 @@ int BinaryTree::getHeigth(Node* usel) const
 	return (rightHight > leftHight) ? rightHight : leftHight;
 }
 
+int BinaryTree::size() const
+{
+	int size = 0;
+	BinaryTreeIterator iter(this);
+	
+	while (iter.exists())
+	{
+		size++;
+		iter.moveToNext();
+	}
+	return size;
+}
+
 int BinaryTree::getHeigth() const
 {
 	return getHeigth(_root);

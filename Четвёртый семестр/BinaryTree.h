@@ -13,6 +13,7 @@ private:
 	int minKey(Node* node) const;
 	int nodeCount(Node* node) const;
 	int getHeigth(Node* node) const;
+	int size() const;
 	void clear(Node* node);
 	void printLeaf(Node* node) const;
 	void addNodeRandomly(Node* node, int value);
@@ -27,7 +28,6 @@ public:
 	BinaryTree(int root_key);
 	~BinaryTree();
 	
-	void addNode();
 	bool deleteNode(Node* node);
 	const Node* findNode(int value) const;
 
