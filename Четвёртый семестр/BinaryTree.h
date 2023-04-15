@@ -13,22 +13,28 @@ private:
 	int minKey(Node* node) const;
 	int nodeCount(Node* node) const;
 	int getHeigth(Node* node) const;
-	int size() const;
 	void clear(Node* node);
 	void printLeaf(Node* node) const;
 	void addNodeRandomly(Node* node, int value);
 	int isBalance(Node* node) const;
 	void print(Node* root, int marginLeft, int levelSpacing) const;
 
+	Node* _goDown(Node* node);
+	bool _instructionToDeleteNodeWithTwoChild(const Node* node, BinaryTreeIterator iter);
+	bool _instructionToDeleteRootWithTwoChild(const Node* node, BinaryTreeIterator iter);
+	bool _instructionToDeleteNodeWithOneChild(const Node* node, BinaryTreeIterator iter);
+	bool _instructionToDeleteRootWithOneChild(const Node* node, BinaryTreeIterator iter);
+
 public:
 
+	int size() const;
 	BinaryTree() {_root = new Node(0); }
 	BinaryTree(BinaryTree* tree);
 	BinaryTree(Node* nd);
 	BinaryTree(int root_key);
 	~BinaryTree();
 	
-	bool deleteNode(Node* node);
+	bool deleteNode(int key);
 	const Node* findNode(int value) const;
 
 	Node* getRoot() const;
@@ -48,4 +54,5 @@ public:
 	BinaryTree& operator=(BinaryTree& other);
 	void print() const;
 
+	friend class BinaryTreeTesterclass;
 };

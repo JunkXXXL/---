@@ -120,13 +120,218 @@ void BinaryTree::print(Node* root, int marginLeft, int levelSpacing) const
 
 }
 
-void BinaryTree::print() const
+Node* BinaryTree::_goDown(Node* node)
 {
-	print(_root, 1, 1);
+	if (node->getChildrenCount() == 0)
+	{
+		return nullptr;
+	}
+	if (node->getChildrenCount() == 2)
+	{
+		return node->left;
+	}
+	if (node->getChildrenCount() == 1)
+	{
+		if (node->left != nullptr)
+		{
+			return node->left;
+		}
+		else
+		{
+			return node->right;
+		}
+	}
+	return nullptr;
 }
 
-bool BinaryTree::deleteNode(Node* node)
+bool BinaryTree::_instructionToDeleteNodeWithTwoChild(const Node* node, BinaryTreeIterator iter)
 {
+	while (iter.exists())
+	{
+		if (iter.getNode()->left == node)
+		{
+			Node* delPrevNode = iter.getNode();
+			Node* delNode = iter.getNode()->left;
+			Node* replaceNode = iter.getNode()->left->left;
+			Node* replacePrevNode = iter.getNode()->left;
+
+			while (_goDown(replaceNode) != nullptr)
+			{
+				replacePrevNode = replaceNode;
+				replaceNode = _goDown(replaceNode);
+			}
+
+			//step 1
+			if (delPrevNode != nullptr)
+			{
+				delPrevNode->left = replaceNode;
+			}
+
+			//step 3
+			if (replacePrevNode->left == replaceNode)
+			{
+				replacePrevNode->left = nullptr;
+			}
+			else
+			{
+				replacePrevNode->right = nullptr;
+			}
+
+			//step 4
+			replaceNode->left = delNode->left;
+			replaceNode->right = delNode->right;
+
+			//step 2
+			delete delNode;
+			return true;
+		}
+		if (iter.getNode()->right == node)
+		{
+			Node* delPrevNode = iter.getNode();
+			Node* delNode = iter.getNode()->right;
+			Node* replaceNode = iter.getNode()->right;
+			Node* replacePrevNode = iter.getNode()->right->right;
+
+			while (_goDown(replaceNode) != nullptr)
+			{
+				replacePrevNode = replaceNode;
+				replaceNode = _goDown(replaceNode);
+			}
+
+			//step 1
+			if (delPrevNode != nullptr)
+			{
+				delPrevNode->right = replaceNode;
+			}
+
+			//step 3
+			if (replacePrevNode->left == replaceNode)
+			{
+				replacePrevNode->left = nullptr;
+			}
+			else
+			{
+				replacePrevNode->right = nullptr;
+			}
+
+			//step 4
+			replaceNode->left = delNode->left;
+			replaceNode->right = delNode->right;
+
+			//step 2
+			delete delNode;
+
+			return true;
+		}
+		iter.moveToNext();
+	}
+	return false;
+}
+
+bool BinaryTree::_instructionToDeleteRootWithTwoChild(const Node* node, BinaryTreeIterator iter)
+{
+	Node* delNode = iter.getNode()->left;
+	Node* replaceNode = iter.getNode()->left;
+	Node* replacePrevNode = iter.getNode()->left->left;
+
+	while (_goDown(replaceNode) != nullptr)
+	{
+		replacePrevNode = replaceNode;
+		replaceNode = _goDown(replaceNode);
+	}
+
+	//step 1
+
+	//step 3
+	if (replacePrevNode->left == replaceNode)
+	{
+		replacePrevNode->left = nullptr;
+	}
+	else
+	{
+		replaceNode->right = nullptr;
+	}
+
+	//step 4
+	replaceNode->left = delNode->left;
+	replaceNode->right = delNode->right;
+
+	//step 2
+	delete delNode;
+	_root = replaceNode;
+	return true;
+}
+
+bool BinaryTree::_instructionToDeleteNodeWithOneChild(const Node* node, BinaryTreeIterator iter)
+{
+	while (iter.exists())
+	{
+		if (iter.getNode()->left == node)
+		{
+			Node* toDel = iter.getNode()->left;
+			if (iter.getNode()->left->left != nullptr)
+			{
+				iter.getNode()->left = iter.getNode()->left->left;
+			}
+			else
+			{
+				iter.getNode()->left = iter.getNode()->left->right;
+			}
+
+			delete toDel;
+
+			return true;
+		}
+		if (iter.getNode()->right == node)
+		{
+			Node* toDel = iter.getNode()->right;
+			if (iter.getNode()->right->left != nullptr)
+			{
+				iter.getNode()->right = iter.getNode()->right->left;
+			}
+			else
+			{
+				iter.getNode()->right = iter.getNode()->right->right;
+			}
+
+			delete toDel;
+
+			return true;
+		}
+		iter.moveToNext();
+	}
+	return false;
+}
+
+bool BinaryTree::_instructionToDeleteRootWithOneChild(const Node* node, BinaryTreeIterator iter)
+{
+	Node* toDel = iter.getNode();
+	Node* newRoot = nullptr;
+	if (toDel->left != nullptr)
+	{
+		newRoot = toDel->left;
+	}
+	else
+	{
+		newRoot = toDel->right;
+	}
+	delete toDel;
+	_root = newRoot;
+
+	return true;
+}
+
+void BinaryTree::print() const
+{
+	print(_root, 1, 3);
+	std::cout << "\n";
+}
+
+bool BinaryTree::deleteNode(int key)
+{
+	const Node* node = findNode(key);
+	if (node == nullptr) return false;
+
 	if (node->getChildrenCount() == 0)
 	{
 		BinaryTreeIterator iter(this);
@@ -144,6 +349,7 @@ bool BinaryTree::deleteNode(Node* node)
 				iter.getNode()->right = nullptr;
 				return true;
 			}
+			iter.moveToNext();
 		}
 		return false;
 	}
@@ -151,89 +357,29 @@ bool BinaryTree::deleteNode(Node* node)
 	else if (node->getChildrenCount() == 1)
 	{
 		BinaryTreeIterator iter(this);
-		while (iter.exists())
+		if (iter.getNode() != nullptr)
 		{
-			if (iter.getNode()->left == node)
-			{
-				Node* toDel = iter.getNode()->left;
-				if (iter.getNode()->left->left != nullptr)
-				{
-					iter.getNode()->left = iter.getNode()->left->left;
-				}
-				else
-				{
-					iter.getNode()->left = iter.getNode()->left->right;
-				}
-				
-				delete toDel;
-				
-				return true;
-			}
-			if (iter.getNode()->right == node)
-			{
-				Node* toDel = iter.getNode()->right;
-				if (iter.getNode()->right->left != nullptr)
-				{
-					iter.getNode()->right = iter.getNode()->right->left;
-				}
-				else
-				{
-					iter.getNode()->right = iter.getNode()->right->right;
-				}
-
-				delete toDel;
-
-				return true;
-			}
+			return _instructionToDeleteNodeWithOneChild(node, iter);
 		}
-		return false;
+		else
+		{
+			return _instructionToDeleteRootWithOneChild(node, iter);
+		}
 	}
 
 	else
 	{
 		BinaryTreeIterator iter(this);
-		while (iter.exists())
+		if (iter.getNode() != node)
 		{
-			if (iter.getNode()->left == node)
-			{
-				Node* toDel = iter.getNode()->left;
-				Node* replaceNode = iter.getNode()->left;
-				Node* toReplace = nullptr;
-				while (replaceNode->left != nullptr)
-				{
-					replaceNode = replaceNode->left;
-					if (replaceNode->left->left == nullptr)
-					{
-						toReplace = replaceNode->left;
-						replaceNode->left = nullptr;
-						toReplace->left = iter.getNode()->left->left;
-						toReplace->right = iter.getNode()->left->right;
-					}
-				}
-				delete toDel;
-				iter.getNode()->left = toReplace;
-			}
-			if (iter.getNode()->right == node)
-			{
-				Node* toDel = iter.getNode()->right;
-				Node* replaceNode = iter.getNode()->right;
-				Node* toReplace = nullptr;
-				while (replaceNode->right != nullptr)
-				{
-					replaceNode = replaceNode->right;
-					if (replaceNode->right->right == nullptr)
-					{
-						toReplace = replaceNode->right;
-						replaceNode->right = nullptr;
-						toReplace->left = iter.getNode()->right->left;
-						toReplace->right = iter.getNode()->right->right;
-					}
-				}
-				delete toDel;
-				iter.getNode()->right = toReplace;
-			}
+			std::cout << "1";
+			return _instructionToDeleteNodeWithTwoChild(node, iter);
 		}
-		return false;
+		else
+		{
+			std::cout << "2";
+			return _instructionToDeleteRootWithTwoChild(node, iter);
+		}
 	}
 
 	return false;
