@@ -140,11 +140,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BinaryTree.cpp" />
+    <ClCompile Include="BinaryTreeIterator.cpp" />
+    <ClCompile Include="BinaryTreeTester.cpp" />
+    <ClCompile Include="BinaryTreeTesterClass.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="SearchTree.cpp" />
+    <ClCompile Include="SearchTreeIterator.cpp" />
+    <ClCompile Include="SearchTreeTester.cpp" />
     <ClCompile Include="Четвёртый семестр.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BinaryTree.h" />
+    <ClInclude Include="BinaryTreeIterator.h" />
+    <ClInclude Include="BinaryTreeTesterClass.h" />
+    <ClInclude Include="Iterator.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="SearchTree.h" />
+    <ClInclude Include="SearchTreeIterator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

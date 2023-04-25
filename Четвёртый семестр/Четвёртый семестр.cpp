@@ -23,6 +23,28 @@ bool createFileWithNumbers(const std::string& fileName, const int numbersCount, 
     return true;
 }
 
+bool newCreateFileWithNumbers(const std::string& fileName, const int numbersCount, const unsigned long long maxNumberValue)
+{
+    std::ofstream fFile;
+    fFile.open(fileName);
+
+    if (!fFile.is_open())
+    {
+        return false;
+    }
+
+    std::random_device rd;
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<> distrib(0, maxNumberValue);
+    for (int i = 0; i < numbersCount; i++)
+    {
+        fFile << gen() % maxNumberValue << " ";
+    }
+
+    fFile.close();
+    return true;
+}
+
 void Merge(const std::string& fileName, int p)
 {
     std::ofstream Ffile;
@@ -38,7 +60,7 @@ void Merge(const std::string& fileName, int p)
 
     int i, j;
 
-    int Anumber, Bnumber;
+    unsigned long long Anumber, Bnumber;
     fls[0] >> Anumber; fls[1] >> Bnumber;
     
     while (fls[0] && fls[1])
@@ -117,7 +139,8 @@ bool Separate(const std::string& fileName, int p)
     fls[0].close(); fls[1].close(); Ffile.close();
     delete[] fls;
 
-    std::ifstream f2; f2.open("Bfile.txt");
+    std::ifstream f2; 
+    f2.open("Bfile.txt");
     if (f2 >> number)
     {
         f2.close();
@@ -158,7 +181,7 @@ void sortFile(const std::string& fileName)
         Separate(fileName, p);
         Merge(fileName, p);
         p = p * 2;
-        std::cout << p << " ";
+        //std::cout << p << " ";
     }
 
 }
@@ -173,7 +196,7 @@ bool isFileContainsSortedArray(const std::string& fileName)
         return false;
     }
 
-    double lastNumber, currentNumber;
+    unsigned long long lastNumber, currentNumber;
     fFile >> lastNumber;
 
     while (fFile)
@@ -191,7 +214,7 @@ bool isFileContainsSortedArray(const std::string& fileName)
 
 int createAndSortFile(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
-    if (!createFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
+    if (!newCreateFileWithNumbers(fileName, numbersCount, maxNumberValue)) {
         return -1;
     }
 
@@ -204,27 +227,27 @@ int createAndSortFile(const std::string& fileName, const int numbersCount, const
     return 1;
 }
 
-int main()
+int main1()
 {
     std::string fileName = "file.txt";
-    const int numbersCount = 100000;
-    const int maxNumberValue = 100000;
+    const int numbersCount = 100;
+    const int maxNumberValue = 1000000000;
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 10; i++) {
         switch (createAndSortFile(fileName, numbersCount, maxNumberValue)) {
         case 1:
             std::cout << "Test passed." << std::endl;
             break;
-
+        
         case -1:
             std::cout << "Test failed: can't create file." << std::endl;
             break;
-
+        
         case -2:
             std::cout << "Test failed: file isn't sorted." << std::endl;
             break;
         }
-
-        return 0;
     }
+
+    return 0;
 }

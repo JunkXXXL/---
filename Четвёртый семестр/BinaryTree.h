@@ -29,7 +29,7 @@ public:
 	bool isBalance() const;
 	int sumKeys() const;
 	int getNodeLevel(Node * node) const;
-	std::vector<int> getVector() const;
+	virtual std::vector<int> getVector() const;
 	void printLeaf() const;
 	BinaryTree& operator=(const BinaryTree& other);
 	void print() const;
