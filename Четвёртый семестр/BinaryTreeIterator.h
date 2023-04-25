@@ -13,11 +13,11 @@ public:
     bool exists() const override;
     int value() const override;
     void moveToNext() override;
-    const Node* getNode();
+    Node* getNode();
 
 private:
-    const Node* _head = nullptr;
-    const Node *_tree = nullptr;
+    Node* _head = nullptr;
+    Node *_tree = nullptr;
     int _position = 0;
     int _treeHigth = 1;
 };

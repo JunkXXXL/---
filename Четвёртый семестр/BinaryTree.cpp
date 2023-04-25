@@ -1,7 +1,7 @@
 #include "BinaryTree.h"
 #include <random>
 #include <time.h>
-#include "BinaryTreeIterator.h"
+
 
 int BinaryTree::maxKey(Node* node) const
 {
@@ -47,9 +47,9 @@ int BinaryTree::minKey(Node* node) const
 	return min;
 }
 
-BinaryTree::BinaryTree(BinaryTree* tree)
+BinaryTree::BinaryTree(const BinaryTree& tree)
 {
-	_root = new Node(tree->_root);
+	_root = new Node(tree._root);
 }
 
 BinaryTree::BinaryTree(Node* nd)
@@ -249,7 +249,7 @@ bool BinaryTree::_instructionToDeleteRootWithTwoChild(const Node* node, BinaryTr
 	}
 	else
 	{
-		replaceNode->right = nullptr;
+		replacePrevNode->right = nullptr;
 	}
 
 	//step 4
@@ -372,12 +372,10 @@ bool BinaryTree::deleteNode(int key)
 		BinaryTreeIterator iter(this);
 		if (iter.getNode() != node)
 		{
-			std::cout << "1";
 			return _instructionToDeleteNodeWithTwoChild(node, iter);
 		}
 		else
 		{
-			std::cout << "2";
 			return _instructionToDeleteRootWithTwoChild(node, iter);
 		}
 	}
@@ -408,7 +406,6 @@ Node* BinaryTree::getRoot() const
 void BinaryTree::clear() //clear
 {
 	clear(_root);
-	_root->key = 0;
 }
 
 void BinaryTree::clear(Node* node)
@@ -423,6 +420,8 @@ void BinaryTree::clear(Node* node)
 		clear(node->right);
 		delete node->right;
 	}
+	node->left = nullptr;
+	node->right = nullptr;
 }
 
 void BinaryTree::printLeaf() const
@@ -430,7 +429,7 @@ void BinaryTree::printLeaf() const
 	printLeaf(_root);
 }
 
-BinaryTree& BinaryTree::operator=(BinaryTree& other)
+BinaryTree& BinaryTree::operator=(const BinaryTree& other)
 {
 	if (other._root != _root)
 	{
@@ -442,38 +441,39 @@ BinaryTree& BinaryTree::operator=(BinaryTree& other)
 	return *this;
 }
 
-void BinaryTree::printLeaf(Node* usel) const
+void BinaryTree::printLeaf(Node* node) const
 {
-	if (usel->left != nullptr)
+	if (node->left != nullptr)
 	{
-		printLeaf(usel->left);
+		printLeaf(node->left);
 	}
-	if (usel->right != nullptr)
+	if (node->right != nullptr)
 	{
-		printLeaf(usel->right);
+		printLeaf(node->right);
 	}
-	if (usel->left == nullptr && usel->right == nullptr)
+	if (node->left == nullptr && node->right == nullptr)
 	{
-		std::cout << usel->key << " ";
+		std::cout << node->key << " ";
 	}
 }
 
 bool BinaryTree::isEmpty()
 {
 	return _root;
+	
 }
 
-int BinaryTree::getHeigth(Node* usel) const
+int BinaryTree::getHeigth(Node* node) const
 {
 	int rightHight = 1;
 	int leftHight = 1;
-	if (usel->left != nullptr)
+	if (node->left != nullptr)
 	{
-		leftHight += getHeigth(usel->left);
+		leftHight += getHeigth(node->left);
 	}
-	if (usel->right != nullptr)
+	if (node->right != nullptr)
 	{
-		rightHight += getHeigth(usel->right);
+		rightHight += getHeigth(node->right);
 	}
 
 	return (rightHight > leftHight) ? rightHight : leftHight;
@@ -497,11 +497,9 @@ int BinaryTree::getHeigth() const
 	return getHeigth(_root);
 }
 
-BinaryTree BinaryTree::copyUnderTree(Node* usel)
+BinaryTree BinaryTree::copyUnderTree(Node* node)
 {
-	BinaryTree to_ret(new Node(usel));
-	
-	return to_ret;
+	return BinaryTree(new Node(node));
 }
 
 int BinaryTree::nodeCount(Node* node) const
@@ -533,18 +531,18 @@ int BinaryTree::minKey() const
 	return minKey(_root);
 }
 
-void BinaryTree::addNodeRandomly(Node* usel, int value)
+void BinaryTree::addNode(Node* node, int value)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	Node* pointer = usel;
+	Node* pointer = node;
 	bool switcher = gen() % 2;
 	if (switcher)
 	{
 		if (pointer->right != nullptr)
 		{
-			addNodeRandomly(pointer->right, value);
+			addNode(pointer->right, value);
 		}
 		else
 		{
@@ -555,7 +553,7 @@ void BinaryTree::addNodeRandomly(Node* usel, int value)
 	{
 		if (pointer->left != nullptr)
 		{
-			addNodeRandomly(pointer->left, value);
+			addNode(pointer->left, value);
 		}
 		else
 		{
@@ -564,9 +562,9 @@ void BinaryTree::addNodeRandomly(Node* usel, int value)
 	}
 }
 
-void BinaryTree::addNodeRandomly(int value)
+void BinaryTree::addNode(int value)
 {
-	addNodeRandomly(_root, value);
+	addNode(_root, value);
 }
 
 int BinaryTree::isBalance(Node* node) const

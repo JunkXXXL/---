@@ -73,7 +73,7 @@ void BinaryTreeIterator::moveToNext()
 	}
 }
 
-const Node* BinaryTreeIterator::getNode()
+Node* BinaryTreeIterator::getNode()
 {
 	return _tree;
 }

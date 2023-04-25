@@ -19,4 +19,5 @@ public:
 
 	friend class BinaryTree;
 	friend class BinaryTreeIterator;
+	friend class SearchTree;
 };
