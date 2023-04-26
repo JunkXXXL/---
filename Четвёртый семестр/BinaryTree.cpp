@@ -383,7 +383,7 @@ bool BinaryTree::deleteNode(int key)
 	return false;
 }
 
-const Node* BinaryTree::findNode(int value) const
+Node* BinaryTree::findNode(int value) const
 {
 	BinaryTreeIterator iter(this);
 

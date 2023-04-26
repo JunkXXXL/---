@@ -15,7 +15,7 @@ public:
 	virtual ~BinaryTree();
 	
 	virtual bool deleteNode(int key);
-	const Node* findNode(int value) const;
+	virtual Node* findNode(int value) const;
 
 	Node* getRoot() const;
 	void clear();
