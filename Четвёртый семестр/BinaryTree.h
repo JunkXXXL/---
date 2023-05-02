@@ -34,6 +34,12 @@ public:
 	BinaryTree& operator=(const BinaryTree& other);
 	void print() const;
 
+	//static SearchTree& toBalance(SearchTree* tree);
+	static void RotateRight(Node* branch);
+	static void RotateLeft(Node* branch);
+	static void RotateRightRoot(BinaryTree* tree);
+	static void RotateLeftRoot(BinaryTree* tree);
+
 	friend class BinaryTreeTesterclass;
 
 protected:

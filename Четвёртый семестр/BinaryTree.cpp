@@ -410,6 +410,7 @@ void BinaryTree::clear() //clear
 
 void BinaryTree::clear(Node* node)
 {
+	if (_root == nullptr) return;
 	if (node->left != nullptr)
 	{
 		clear(node->left);
@@ -592,4 +593,64 @@ int BinaryTree::isBalance(Node* node) const
 bool BinaryTree::isBalance() const
 {
 	return isBalance(_root);
+}
+
+//BinaryTree& BinaryTree::toBalance(SearchTree* tree)
+//{
+//	SearchTree* copy = new SearchTree(*tree);
+//	return 0;
+//}
+
+void BinaryTree::RotateRight(Node* branch)
+{
+		Node* parent = branch;
+		Node* pointer = parent->left;
+		Node* heir = pointer->left;
+
+		parent->left = heir;
+		pointer->left = nullptr;
+		heir->right = pointer;
+}
+
+void BinaryTree::RotateLeft(Node* branch)
+{
+		Node* parent = branch;
+		Node* pointer = parent->right;
+		Node* heir = pointer->right;
+
+		parent->right = heir;
+		pointer->right = nullptr;
+		heir->left = pointer;
+	
+}
+
+void BinaryTree::RotateRightRoot(BinaryTree* tree)
+{
+	Node* pointer = tree->_root;
+	Node* heir = pointer->right;
+
+	pointer->left = nullptr;
+	heir->right = pointer;
+	tree->_root = heir;
+}
+
+void BinaryTree::RotateLeftRoot(BinaryTree* tree)
+{
+	Node* pointer = tree->_root;
+	Node* heir = pointer->left;
+
+	pointer->right = nullptr;
+	heir->left = pointer;
+	tree->_root = heir;
+}
+
+
+int mainx()
+{
+	Node* nd = new Node(0, new Node(1, new Node(2, new Node(3, nullptr, nullptr), nullptr), nullptr), nullptr);
+	BinaryTree tree(nd);
+	tree.print();
+	BinaryTree::RotateRight(nd);
+	tree.print();
+	return 0;
 }

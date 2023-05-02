@@ -1,6 +1,7 @@
 #pragma once
 #include "BinaryTree.h"
 #include <assert.h>
+#include <time.h>
 
 class BinaryTreeTesterClass
 {
@@ -9,14 +10,14 @@ public:
     BinaryTreeTesterClass(bool toPrint = false) { _toPrint = toPrint; };
     ~BinaryTreeTesterClass() = default;
 
-    void test(const int size);
+    void test(const int size, const bool toPrint);
 
 protected:
-    BinaryTree* allocateTree();
-    void deallocateTree(BinaryTree * tree);
-    void check_addAndCount(const BinaryTree & tree, const int size);
-    void check_remove(const BinaryTree & tree, const int size);
-    void check_assign(const BinaryTree& firstTree, const BinaryTree& secondTree);
+    virtual BinaryTree* allocateTree();
+    virtual void deallocateTree(BinaryTree * tree);
+    virtual void check_addAndCount(const BinaryTree & tree, const int size);
+    virtual void check_remove(const BinaryTree & tree, const int size);
+    virtual void check_assign(const BinaryTree& firstTree, const BinaryTree& secondTree);
     void check_height(const BinaryTree & tree, const int size);
 
 private:

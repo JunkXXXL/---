@@ -1,14 +1,15 @@
 #include "BinaryTreeTesterClass.h"
 
-void BinaryTreeTesterClass::test(const int size)
+void BinaryTreeTesterClass::test(const int size, const bool toPrint)
 {
     m_maxSize = size;
+    _toPrint = toPrint;
     assign();
     height();
     addAndCount();
     destructor();
     clear();
-    remove();
+    for (int i = 0; i < 10; i++) remove();
     
 }
 
@@ -43,7 +44,7 @@ void BinaryTreeTesterClass::check_addAndCount(const BinaryTree& tree, const int 
 
 void BinaryTreeTesterClass::destructor()
 {
-    for (int cycles = 0; cycles < 2000; cycles++)
+    for (int cycles = 0; cycles < 20000; cycles++)
     {
         BinaryTree* tree = allocateTree();
         for (int i = 0; i < m_maxSize; ++i) {
@@ -58,41 +59,59 @@ void BinaryTreeTesterClass::destructor()
 
 void BinaryTreeTesterClass::remove()
 {
-    int invalidKey = -1;
+    srand(time(0));
+    int invalidKey = -m_maxSize - 20;
     std::vector<int> nodeKeys;
 
-    BinaryTree tree;
-    tree.deleteNode(invalidKey);
+    BinaryTree* tree = allocateTree();
+    tree->deleteNode(invalidKey);
 
-    for (int i = 1; i < m_maxSize; ++i) {
-        nodeKeys.push_back(i);
-        tree.addNode(i);
+    for (int i = -m_maxSize/2; i < 0; ++i) {
+        int toAdd = - rand() % m_maxSize;
+        if (tree->findNode(toAdd) == nullptr)
+        {
+            nodeKeys.push_back(toAdd);
+            tree->addNode(toAdd);
+        }
     }
+    for (int i = 1; i < m_maxSize/2; ++i) {
+        int toAdd = rand() % m_maxSize;
+        if (tree->findNode(toAdd) == nullptr)
+        {
+            nodeKeys.push_back(toAdd);
+            tree->addNode(toAdd);
+        }
+    }
+    nodeKeys.pop_back();
+    nodeKeys.push_back(0);
+
     if (_toPrint)
     {
-        tree.print();
+        tree->print();
     }
 
     while (!nodeKeys.empty()) {
         int removedNodeIndex = rand() % nodeKeys.size(); //3
 
-        tree.deleteNode(invalidKey);
-        check_remove(tree, nodeKeys.size());
+        tree->deleteNode(invalidKey);
+        check_remove(*tree, nodeKeys.size());
 
         if (_toPrint) std::cout << "\n remove" << nodeKeys[removedNodeIndex] << " \n";
 
-        tree.deleteNode(nodeKeys[removedNodeIndex]);
+        tree->deleteNode(nodeKeys[removedNodeIndex]);
         nodeKeys.erase(nodeKeys.begin() + removedNodeIndex);
-        check_remove(tree, nodeKeys.size());
+        
 
         if (_toPrint)
         {
-            tree.print();
+            tree->print();
         }
+        check_remove(*tree, nodeKeys.size());
     }
 
-    tree.deleteNode(invalidKey);
-    check_remove(tree, nodeKeys.size());
+    tree->deleteNode(invalidKey);
+    check_remove(*tree, nodeKeys.size());
+    deallocateTree(tree);
 }
 
 void BinaryTreeTesterClass::check_remove(const BinaryTree& tree, const int size)
@@ -107,13 +126,20 @@ void BinaryTreeTesterClass::check_assign(const BinaryTree& firstTree, const Bina
 
 void BinaryTreeTesterClass::assign()
 {
-    BinaryTree tree1(new Node(5));
-    BinaryTree tree2;
-    tree2 = tree1;
-    check_assign(tree1, tree2);
+    BinaryTree* tree1 = allocateTree();
+    BinaryTree* tree2 = allocateTree();
+    for (int i = 0; i < 5; i++)
+    {
+        tree1->addNode(i);
+    }
+    tree2->operator=(*tree1);
+    check_assign(*tree1, *tree2);
 
-    BinaryTree tree3(tree2);
-    check_assign(tree3, tree2);
+    BinaryTree tree3(*tree2);
+    check_assign(tree3, *tree2);
+    deallocateTree(tree1);
+    deallocateTree(tree2);
+    deallocateTree(tree3);
 }
 
 void BinaryTreeTesterClass::clear()

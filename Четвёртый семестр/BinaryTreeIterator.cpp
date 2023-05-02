@@ -1,79 +1,57 @@
 #include "BinaryTreeIterator.h"
-#include <stack>
+#include <vector>
+
+void BinaryTreeIterator::_writeVector()
+{
+	_nodeVec.push_back(_tree);
+	int counter = 0;
+	while (_nodeVec.size() > counter)
+	{
+		if (_nodeVec[counter]->left != nullptr) _nodeVec.push_back(_nodeVec[counter]->left);
+		if (_nodeVec[counter]->right != nullptr) _nodeVec.push_back(_nodeVec[counter]->right);
+		counter++;
+	}
+}
 
 BinaryTreeIterator::BinaryTreeIterator(const BinaryTree *tree)
 {
 	_tree = tree->getRoot();
-	_head = tree->getRoot();
-	_treeHigth = tree->getHeigth();
+	_writeVector();
 }
 
 BinaryTreeIterator::BinaryTreeIterator(BinaryTree* tree)
 {
 	_tree = tree->getRoot();
-	_head = tree->getRoot();
-	_treeHigth = tree->getHeigth();
+	_writeVector();
+}
+
+BinaryTreeIterator::~BinaryTreeIterator()
+{
+	Node* pointer = nullptr;
+	while (!_nodeVec.empty())
+	{
+		_nodeVec.pop_back();
+	}
 }
 
 bool BinaryTreeIterator::exists() const
 {
-	if (_tree == nullptr) return false;
-	else return true;
+	if (_position < _nodeVec.size()) return true;
+	else return false;
 }
 
 int BinaryTreeIterator::value() const
 {
-	if (exists()) return _tree->getKey();
+	if (exists()) return _nodeVec[_position]->getKey();
 	else throw "Binary Tree is not exist";
 }
 
 void BinaryTreeIterator::moveToNext()
 {
-	int elements = (2 << _treeHigth) - 1;
 	_position++;
-
-	_tree = _head;
-	std::stack<bool> wayToNext;
-
-	if (_position < elements)
-	{
-		bool toStack;
-		bool toward; //0 - left   1 - right
-
-		for (int pos = _position; pos > 0; pos = (pos % 2) ? pos / 2 : (pos / 2 - 1))
-		{
-			toStack = !(pos % 2);
-			wayToNext.push(toStack);
-		}
-
-		while (!wayToNext.empty())
-		{
-			toward = wayToNext.top();
-			wayToNext.pop();
-
-			if (toward == true && _tree != nullptr)
-			{
-				_tree = _tree->right;
-			}
-			else if (toward == false && _tree != nullptr)
-			{
-				_tree = _tree->left;
-			}
-			if (_tree == nullptr)
-			{
-				moveToNext();
-				break;
-			}
-
-		}
-	}
-	else
-	{
-		_tree = nullptr;
-	}
 }
 
 Node* BinaryTreeIterator::getNode()
 {
-	return _tree;
+	return _nodeVec[_position];
 }

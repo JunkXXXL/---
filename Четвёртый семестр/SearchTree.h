@@ -23,7 +23,7 @@ class SearchTree: public BinaryTree
 		int maxKey() const override;
 		Node* findNode(int value) const override;
 		int getHeigthNode(Node* nd = nullptr) const;
-		SearchTree& operator=(const SearchTree& other) = default;
+		SearchTree& operator=(const SearchTree& other);
 		std::vector<int> getVector() const override;
 
 		friend class SearchTreeIterator;

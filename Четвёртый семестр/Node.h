@@ -21,4 +21,5 @@ public:
 	friend class BinaryTreeIterator;
 	friend class SearchTree;
 	friend class SearchTreeIterator;
+	friend class SearchTreeTester;
 };

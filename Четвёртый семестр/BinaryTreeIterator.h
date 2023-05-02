@@ -8,7 +8,7 @@ class BinaryTreeIterator : public Iterator
 public:
     BinaryTreeIterator(const BinaryTree *tree);
     BinaryTreeIterator(BinaryTree *tree);
-    ~BinaryTreeIterator() override = default;
+    ~BinaryTreeIterator() override;
 
     bool exists() const override;
     int value() const override;
@@ -16,9 +16,10 @@ public:
     Node* getNode();
 
 private:
-    Node* _head = nullptr;
     Node *_tree = nullptr;
     int _position = 0;
-    int _treeHigth = 1;
+    std::vector<Node*> _nodeVec;
+
+    void _writeVector();
 };
 

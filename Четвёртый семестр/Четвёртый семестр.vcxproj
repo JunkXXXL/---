@@ -157,6 +157,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="SearchTree.h" />
     <ClInclude Include="SearchTreeIterator.h" />
+    <ClInclude Include="SearchTreeTester.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
