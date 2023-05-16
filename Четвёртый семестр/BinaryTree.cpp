@@ -590,67 +590,156 @@ int BinaryTree::isBalance(Node* node) const
 	return inf;
 }
 
+int** BinaryTree::_makeTableW(int len, int* q, int* p)
+{
+	int** table = new int* [len];
+	for (int i = 0; i < len; i++)
+	{
+		table[i] = new int[len];
+		for (int j = 0; j < len; j++) table[i][j] = 0;
+		table[i][i] = q[i];
+	}
+
+	for (int row = 1; row < len; row++)
+	{
+		for (int line = 0; line < len - row; line++)
+		{
+			int j = row + line;
+			table[line][j] = table[line][j - 1] + p[j] + q[j];
+		}
+	}
+
+	return table;
+}
+
+int** BinaryTree::_makeTableR(int len, int** W)
+{
+	int** C = new int* [len];
+	int** R = new int* [len];
+	for (int i = 0; i < len; i++)
+	{
+		C[i] = new int[len] {0};
+		R[i] = new int[len] {0};
+		C[i][i] = W[i][i];
+	}
+
+	int minSum = INT_MAX;
+	int line;
+	int minK = -1;
+	for (int counter = 1; counter < len; counter++) {
+		line = 0;
+		for (int row = counter; row < len; row++)
+		{
+			for (int k = row; k > line; k--)
+			{
+				if ((C[line][k - 1] + C[k][row]) < minSum)
+				{
+					minSum = C[line][k - 1] + C[k][row];
+					minK = k;
+				}
+			}
+			C[line][row] = W[line][row] + minSum;
+			R[line][row] = minK;
+			minSum = INT_MAX;
+			line++;
+		}
+	}
+
+	for (int i = 0; i < len; i++)
+	{
+		delete[] C[i];
+	}
+	delete[] C;
+
+	return R;
+}
+
+bool BinaryTree::_checkInTree(int key, BinaryTree& tree)
+{
+	Node* root = tree.getRoot();
+	while (root != nullptr)
+	{
+		if (root->key == key) return true;
+		if (root->key > key) root = root->left;
+		else root = root->left;
+	}
+	return false;
+}
+
+Node* BinaryTree::_addToTree(int key, Node* nd, Node* Parent)
+{
+	nd = new Node(key);
+	if (nd->key < Parent->key)
+	{
+		Parent->left = nd;
+	}
+	else
+	{
+		Parent->right = nd;
+	}
+	return nd;
+}
+
+Node* BinaryTree::_createOptimalTree(int* keys, int** matrix, int i, int j)
+{
+	Node* root;
+	if (i >= j)
+	{
+		root = nullptr;
+		return root;
+	}
+	else
+	{
+		int k = matrix[i][j];
+		root = new Node(keys[k]);
+		root->left = _createOptimalTree(keys, matrix, i, k - 1);
+		root->right = _createOptimalTree(keys, matrix, k, j);
+	}
+	return root;
+}
+
+BinaryTree BinaryTree::optimalTree(int len, int* keys, int* frequency, int* q)
+{
+
+	int** W = BinaryTree::_makeTableW(len, q, keys);
+	int** R = BinaryTree::_makeTableR(len, W);
+
+	BinaryTree Tree(frequency[R[0][len - 1]]);
+	Node* head = Tree.getRoot();
+
+	Tree._root = _createOptimalTree(frequency, R, 0, len - 1);
+
+	for (int i = 0; i < len; i++)
+	{
+		delete[] W[i];
+		delete[] R[i];
+	}
+	delete[] W;
+	delete[] R;
+	return Tree;
+}
+
 bool BinaryTree::isBalance() const
 {
 	return isBalance(_root);
 }
 
-//BinaryTree& BinaryTree::toBalance(SearchTree* tree)
-//{
-//	SearchTree* copy = new SearchTree(*tree);
-//	return 0;
-//}
 
-void BinaryTree::RotateRight(Node* branch)
+int main()
 {
-		Node* parent = branch;
-		Node* pointer = parent->left;
-		Node* heir = pointer->left;
+	int* p = new int[5];
+	p[0] = -1; p[1] = 2; p[2] = 1; p[3] = 1; p[4] = 5;
+	int* q = new int[5];
+	q[0] = 1; q[1] = 10; q[2] = 1; q[3] = 1; q[4] = 10;
+	int* frequency = new int[5];
+	frequency[0] = 0; frequency[1] = 10; frequency[2] = 20; frequency[3] = 30; frequency[4] = 40;
 
-		parent->left = heir;
-		pointer->left = nullptr;
-		heir->right = pointer;
-}
+	BinaryTree Tree = BinaryTree::optimalTree(5, p, frequency, q); 
 
-void BinaryTree::RotateLeft(Node* branch)
-{
-		Node* parent = branch;
-		Node* pointer = parent->right;
-		Node* heir = pointer->right;
-
-		parent->right = heir;
-		pointer->right = nullptr;
-		heir->left = pointer;
 	
-}
-
-void BinaryTree::RotateRightRoot(BinaryTree* tree)
-{
-	Node* pointer = tree->_root;
-	Node* heir = pointer->right;
-
-	pointer->left = nullptr;
-	heir->right = pointer;
-	tree->_root = heir;
-}
-
-void BinaryTree::RotateLeftRoot(BinaryTree* tree)
-{
-	Node* pointer = tree->_root;
-	Node* heir = pointer->left;
-
-	pointer->right = nullptr;
-	heir->left = pointer;
-	tree->_root = heir;
-}
-
-
-int mainx()
-{
-	Node* nd = new Node(0, new Node(1, new Node(2, new Node(3, nullptr, nullptr), nullptr), nullptr), nullptr);
-	BinaryTree tree(nd);
-	tree.print();
-	BinaryTree::RotateRight(nd);
-	tree.print();
+	delete[] p;
+	delete[] q;
+	delete[] frequency;
+	Tree.print();
 	return 0;
 }

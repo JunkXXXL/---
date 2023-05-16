@@ -35,10 +35,12 @@ public:
 	void print() const;
 
 	//static SearchTree& toBalance(SearchTree* tree);
-	static void RotateRight(Node* branch);
-	static void RotateLeft(Node* branch);
-	static void RotateRightRoot(BinaryTree* tree);
-	static void RotateLeftRoot(BinaryTree* tree);
+	static BinaryTree optimalTree(int len, int* keys, int* frequency, int* q);
+	static int** _makeTableW(int len, int* q, int* p);
+	static int** _makeTableR(int len, int** W);
+	static bool _checkInTree(int key, BinaryTree& tree);
+	static Node* _addToTree(int key, Node* nd, Node* Parent);
+	static Node* _createOptimalTree(int* keys, int** matrix, int i, int j);
 
 	friend class BinaryTreeTesterclass;
 

@@ -5,12 +5,15 @@ void BinaryTreeTesterClass::test(const int size, const bool toPrint)
     m_maxSize = size;
     _toPrint = toPrint;
     assign();
+    getchar();//
     height();
+    getchar();//
     addAndCount();
+    getchar();//
     destructor();
     clear();
     for (int i = 0; i < 10; i++) remove();
-    
+    getchar();
 }
 
 BinaryTree* BinaryTreeTesterClass::allocateTree()
@@ -139,7 +142,6 @@ void BinaryTreeTesterClass::assign()
     check_assign(tree3, *tree2);
     deallocateTree(tree1);
     deallocateTree(tree2);
-    deallocateTree(tree3);
 }
 
 void BinaryTreeTesterClass::clear()
@@ -172,10 +174,11 @@ void BinaryTreeTesterClass::height()
 
 void BinaryTreeTesterClass::height_trivialCases()
 {
-    BinaryTree tree;
-    check_height(tree, 0);
-    tree.addNode(0);
-    check_height(tree, 1);
+    BinaryTree *tree = allocateTree();
+    check_height(*tree, 0);
+    tree->addNode(0);
+    check_height(*tree, 1);
+    deallocateTree(tree);
 }
 
 void BinaryTreeTesterClass::height_longOnlyLeftSubtree()

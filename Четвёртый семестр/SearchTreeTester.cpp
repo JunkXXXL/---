@@ -35,7 +35,7 @@ BinaryTree* SearchTreeTester::allocateTree()
 
 void SearchTreeTester::deallocateTree(BinaryTree* tree)
 {
-	tree->clear();
+	delete tree;
 }
 
 void SearchTreeTester::check_addAndCount(const BinaryTree& tree, const int size)

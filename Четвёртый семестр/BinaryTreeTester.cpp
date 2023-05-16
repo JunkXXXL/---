@@ -5,7 +5,7 @@
 #include "SearchTreeTester.h"
 
 
-int main()
+int mainx()
 {
 	SearchTreeTester tst(false);
 	tst.test(30, true);
