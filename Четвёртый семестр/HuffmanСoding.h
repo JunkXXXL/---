@@ -34,7 +34,7 @@ public:
 		Node* _left = nullptr;
 	};
 	~Huffman—oding();
-	void build();
+	int build(std::string& filePath, std::string& name);
 	float encode(std::string& filePath, std::string& name);
 	bool decode(std::string& filePath, std::string& name);
 	void printTree();

@@ -144,22 +144,12 @@ std::string Huffman—oding::_getWord(char symbol)
 	return Nword;
 }
 
-void Huffman—oding::build()
-{
-
-}
-
-bool comp(Huffman—oding::Node* nd1, Huffman—oding::Node* nd2)
-{
-	return nd1->getFrequency() > nd2->getFrequency();
-}
-
-float Huffman—oding::encode(std::string& filePath, std::string& name)
+int Huffman—oding::build(std::string& filePath, std::string& name)
 {
 	std::ifstream fFile(filePath + name);
 	if (!fFile.is_open())
 		return -1;
-	
+
 	std::vector<Node*> keys;
 	Set elements;
 	unsigned char symbol;
@@ -204,6 +194,23 @@ float Huffman—oding::encode(std::string& filePath, std::string& name)
 		_root->setLeft(keys[0]);
 		keys.pop_back();
 	}
+	return letters;
+}
+
+bool comp(Huffman—oding::Node* nd1, Huffman—oding::Node* nd2)
+{
+	return nd1->getFrequency() > nd2->getFrequency();
+}
+
+float Huffman—oding::encode(std::string& filePath, std::string& name)
+{
+	int letters = 0;
+	int buildCode = build(filePath, name);
+
+	if (buildCode == -1)
+		return -1;
+	else
+		letters = buildCode;
 
 	std::cout << _root->getLeft()->getFrequency() << " "
 		<< _root->getRight()->getFrequency();
@@ -211,6 +218,8 @@ float Huffman—oding::encode(std::string& filePath, std::string& name)
 	_root->getLeft()->getSymbols()->print();
 	_root->getRight()->getSymbols()->print();
 
+	unsigned char symbol;
+	std::ifstream fFile;
 	std::ofstream fencode(filePath + "encoded.txt");
 	fFile.open(filePath + name);
 
