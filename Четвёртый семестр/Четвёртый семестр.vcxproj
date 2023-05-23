@@ -143,21 +143,27 @@
     <ClCompile Include="BinaryTreeIterator.cpp" />
     <ClCompile Include="BinaryTreeTester.cpp" />
     <ClCompile Include="BinaryTreeTesterClass.cpp" />
+    <ClCompile Include="BoolVector.cpp" />
+    <ClCompile Include="HuffmanСoding.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="SearchTree.cpp" />
     <ClCompile Include="SearchTreeIterator.cpp" />
     <ClCompile Include="SearchTreeTester.cpp" />
+    <ClCompile Include="set.cpp" />
     <ClCompile Include="Четвёртый семестр.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BinaryTreeIterator.h" />
     <ClInclude Include="BinaryTreeTesterClass.h" />
+    <ClInclude Include="BoolVector.h" />
+    <ClInclude Include="HuffmanСoding.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="SearchTree.h" />
     <ClInclude Include="SearchTreeIterator.h" />
     <ClInclude Include="SearchTreeTester.h" />
+    <ClInclude Include="set.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

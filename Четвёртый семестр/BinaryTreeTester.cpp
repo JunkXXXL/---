@@ -5,10 +5,10 @@
 #include "SearchTreeTester.h"
 
 
-int mainx()
+int main99()
 {
 	SearchTreeTester tst(false);
-	tst.test(30, true);
+	tst.test(5, true);
 
 	//SearchTree tree;
 	//tree.addNode(-1);

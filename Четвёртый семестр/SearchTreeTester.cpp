@@ -33,11 +33,6 @@ BinaryTree* SearchTreeTester::allocateTree()
 	return new SearchTree;
 }
 
-void SearchTreeTester::deallocateTree(BinaryTree* tree)
-{
-	delete tree;
-}
-
 void SearchTreeTester::check_addAndCount(const BinaryTree& tree, const int size)
 {
 	BinaryTreeTesterClass::check_addAndCount(tree, size);
@@ -54,24 +49,4 @@ void SearchTreeTester::check_assign(const BinaryTree& firstTree, const BinaryTre
 {
 	assert(firstTree.getRoot() != secondTree.getRoot());
 
-}
-
-
-int main23()
-{
-	SearchTree tree(45);
-	tree.addNode(10);
-	tree.addNode(67);
-	tree.addNode(25);
-	tree.addNode(58);
-	tree.addNode(17);
-	tree.addNode(62);/*
-	tree.addNode(4);
-	tree.addNode(17);*/
-
-	tree.print();
-	std::cout << "///// \n";
-	tree.deleteNode(45);
-	tree.print();
-	return 0;
 }

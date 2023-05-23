@@ -46,23 +46,20 @@ Node* SearchTree::_findParent(int key)
 
 bool SearchTree::deleteNode(int key)
 {
-	std::vector<int> vec = getVector();
-	bool inVec = false;
-	for (int i = 0; i < vec.size(); i++)
-	{
-		if (vec[i] == key) inVec = true;
-	}
-
-	if (inVec == false) return false;
+	Node* runner = findNode(key);
+	if (runner == nullptr)
+		return false;
 
 	Node* parent = _findParent(key);
-	Node* runner = findNode(key);
+	
 	if (runner->getChildrenCount() == 0)
 	{
 		if (parent != nullptr) 
 		{
-			if (parent->left == runner)parent->left = nullptr;
-			else parent->right = nullptr;
+			if (parent->left == runner)
+				parent->left = nullptr;
+			else
+				parent->right = nullptr;
 		}
 		else
 		{
@@ -266,4 +263,144 @@ std::vector<int> SearchTree::getVector() const
 	}
 
 	return vector;
+}
+
+
+
+
+std::vector<std::vector<int>> SearchTree::_makeTableW(int len, std::vector<int> q, std::vector<int> p)
+{
+	std::vector<std::vector<int>> table;
+	for (int i = 0; i < len; i++)
+	{
+		table.push_back(std::vector<int>());
+		for (int j = 0; j < len; j++) table[i].push_back(0);
+		table[i][i] = q[i];
+	}
+
+	for (int row = 1; row < len; row++)
+	{
+		for (int line = 0; line < len - row; line++)
+		{
+			int j = row + line;
+			table[line][j] = table[line][j - 1] + p[j] + q[j];
+		}
+	}
+
+	return table;
+}
+
+std::vector<std::vector<int>> SearchTree::_makeTableR(int len, std::vector<std::vector<int>> W)
+{
+	std::vector<std::vector<int>> C;
+	std::vector<std::vector<int>> R;
+	for (int i = 0; i < len; i++)
+	{
+		C.push_back(std::vector<int>());
+		R.push_back(std::vector<int>());
+		for (int j = 0; j < len; j++) C[i].push_back(0);
+		for (int j = 0; j < len; j++) R[i].push_back(0);
+		C[i][i] = W[i][i];
+	}
+
+	int minSum = INT_MAX;
+	int line;
+	int minK = -1;
+	for (int counter = 1; counter < len; counter++) {
+		line = 0;
+		for (int row = counter; row < len; row++)
+		{
+			for (int k = row; k > line; k--)
+			{
+				if ((C[line][k - 1] + C[k][row]) < minSum)
+				{
+					minSum = C[line][k - 1] + C[k][row];
+					minK = k;
+				}
+			}
+			C[line][row] = W[line][row] + minSum;
+			R[line][row] = minK;
+			minSum = INT_MAX;
+			line++;
+		}
+	}
+
+	return R;
+}
+
+bool SearchTree::_checkInTree(int key, SearchTree& tree)
+{
+	Node* root = tree.getRoot();
+	while (root != nullptr)
+	{
+		if (root->key == key) return true;
+		if (root->key > key) root = root->left;
+		else root = root->left;
+	}
+	return false;
+}
+
+Node* SearchTree::_addToTree(int key, Node* nd, Node* Parent)
+{
+	nd = new Node(key);
+	if (nd->key < Parent->key)
+	{
+		Parent->left = nd;
+	}
+	else
+	{
+		Parent->right = nd;
+	}
+	return nd;
+}
+
+Node* SearchTree::_createOptimalTree(std::vector<int> keys, std::vector<std::vector<int>> matrix, int i, int j)
+{
+	Node* root;
+	if (i >= j)
+	{
+		root = nullptr;
+		return root;
+	}
+	else
+	{
+		int k = matrix[i][j];
+		root = new Node(keys[k]);
+		root->left = _createOptimalTree(keys, matrix, i, k - 1);
+		root->right = _createOptimalTree(keys, matrix, k, j);
+	}
+	return root;
+}
+
+SearchTree SearchTree::optimalTree(int len, std::vector<int> keys, std::vector<int> frequency, std::vector<int> q)
+{
+
+	std::vector<std::vector<int>> W = SearchTree::_makeTableW(len, q, keys);
+	std::vector<std::vector<int>> R = SearchTree::_makeTableR(len, W);
+
+	SearchTree Tree(frequency[R[0][len - 1]]);
+	Node* head = Tree.getRoot();
+
+	Tree._root = _createOptimalTree(frequency, R, 0, len - 1);
+
+	return Tree;
+}
+
+int main14()
+{
+	std::vector<int> p;
+	p.push_back(-1); p.push_back(2); p.push_back(1);
+	p.push_back(1); p.push_back(5);
+	std::vector<int> q;
+	q.push_back(1); q.push_back(10); q.push_back(1);
+	q.push_back(1); q.push_back(10);
+	std::vector<int> frequency;
+	frequency.push_back(0); frequency.push_back(10);
+	frequency.push_back(20); frequency.push_back(30);
+	frequency.push_back(40);
+
+	SearchTree Tree = SearchTree::optimalTree(5, p, frequency, q);
+
+	Tree.print();
+	return 0;
 }

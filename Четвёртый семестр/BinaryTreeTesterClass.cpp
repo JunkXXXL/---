@@ -4,15 +4,20 @@ void BinaryTreeTesterClass::test(const int size, const bool toPrint)
 {
     m_maxSize = size;
     _toPrint = toPrint;
+    addAndCount();
+    std::cout << "add and count check ended, wait...";
+    getchar();//
     assign();
+    std::cout << "assign check ended, wait...";
     getchar();//
     height();
-    getchar();//
-    addAndCount();
+    std::cout << "height check ended, wait...";
     getchar();//
     destructor();
     clear();
-    for (int i = 0; i < 10; i++) remove();
+    for (int i = 0; i < 10; i++)
+        remove();
+    std::cout << "remove check ended, wait...";
     getchar();
 }
 
@@ -50,7 +55,7 @@ void BinaryTreeTesterClass::destructor()
     for (int cycles = 0; cycles < 20000; cycles++)
     {
         BinaryTree* tree = allocateTree();
-        for (int i = 0; i < m_maxSize; ++i) {
+        for (int i = 1; i < m_maxSize; ++i) {
             tree->addNode(i);
         }
         deallocateTree(tree);

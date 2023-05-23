@@ -16,8 +16,7 @@ SearchTreeIterator::SearchTreeIterator(SearchTree* tree)
 
 bool SearchTreeIterator::exists() const
 {
-	if (_tree == nullptr) return false;
-	else return true;
+	return (_tree != nullptr);
 }
 
 int SearchTreeIterator::value() const
@@ -32,7 +31,8 @@ Node* SearchTreeIterator::getNode()
 
 void SearchTreeIterator::moveToNext()
 {
-	if (_nodeStack.empty()) _tree = nullptr;
+	if (_nodeStack.empty())
+		_tree = nullptr;
 	else
 	{
 		_tree = _nodeStack.top();
