@@ -259,7 +259,10 @@ int main()
     setlocale(LC_ALL, "Russian");
     std::string path = "C:\\Users\\Lsa32\\Desktop\\ANDwork\\";
     std::string name = "HuffmanTest.txt";
+    std::string name2 = "encoded.txt";
     HuffmanСoding code;
-    code.encode(path, name);
+    std::cout << code.encode(path, name) << '\n';
+    code.printTree();
+    std::cout << code.decode(path, name2);
     return 0;
 }

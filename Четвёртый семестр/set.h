@@ -18,6 +18,7 @@ public:
 	~Set();
 
 	void print();
+	std::string getSymbols();
 
 	int getPower() const;
 	bool has(const unsigned char element_pos) const;

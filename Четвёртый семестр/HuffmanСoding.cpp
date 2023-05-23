@@ -82,6 +82,8 @@ Huffman—oding::Node* Huffman—oding::Node::operator+(Node* second)
 	int ab = (_Symbols->operator&(*second->_Symbols)).countWeight();
 	toRet->_frequency = a + b - ab;
 	*toRet->_Symbols = (_Symbols->operator|(*second->getSymbols()));
+	toRet->_left = this;
+	toRet->_right = second;
 	return toRet;
 }
 
@@ -95,6 +97,23 @@ int Huffman—oding::_findPosition(std::vector<Node*> keys, char symbol)
 		}
 	}
 	return -1;
+}
+
+void Huffman—oding::printTree(Huffman—oding::Node* root, int margin)
+{
+	if (root == nullptr) return;
+
+	printTree(root->getRight(), margin + 8);
+	std::cout << std::string(margin, ' ');
+	root->getSymbols()->print();
+	std::cout << ":" << root->getFrequency() << "\n";
+	printTree(root->getLeft(), margin + 8);
+}
+
+void Huffman—oding::printTree()
+{
+	printTree(_root, 0);
+	std::cout << "\n";
 }
 
 std::string Huffman—oding::_getWord(char symbol)
@@ -135,7 +154,7 @@ bool comp(Huffman—oding::Node* nd1, Huffman—oding::Node* nd2)
 	return nd1->getFrequency() > nd2->getFrequency();
 }
 
-int Huffman—oding::encode(std::string& filePath, std::string& name)
+float Huffman—oding::encode(std::string& filePath, std::string& name)
 {
 	std::ifstream fFile(filePath + name);
 	if (!fFile.is_open())
@@ -196,17 +215,54 @@ int Huffman—oding::encode(std::string& filePath, std::string& name)
 	fFile.open(filePath + name);
 
 	std::string code;
+	int bites = 0;
 	while (fFile >> std::noskipws >> symbol)
 	{
 		code = _getWord(symbol);
 		fencode << code;
+		bites += code.size();
 	}
 	fFile.close();
 	fencode.close();
-	return 0;
+	float koef = (float)bites / (letters * 8);
+	return koef;
 }
 
-bool Huffman—oding::decode(std::string& fileName)
+bool Huffman—oding::decode(std::string& filePath, std::string& name)
 {
-	return false;
+	std::ifstream fFile(filePath + name);
+	std::ofstream decoded(filePath + "Decoded.txt");
+	if (!fFile.is_open())
+		return false;
+
+	Node* pointer = _root;
+	unsigned char symbol;
+	while (fFile >> symbol)
+	{
+		if (symbol == '0')
+		{
+			if (pointer->getLeft() != nullptr)
+				pointer = pointer->getLeft();
+			else
+			{
+				decoded << pointer->getSymbols()->getSymbols();
+				pointer = _root->getLeft();
+			}
+		}
+		if (symbol == '1')
+		{
+			if (pointer->getRight() != nullptr)
+				pointer = pointer->getRight();
+			else
+			{
+				decoded << pointer->getSymbols()->getSymbols();
+				pointer = _root->getRight();
+			}
+		}
+	}
+	decoded << pointer->getSymbols()->getSymbols();
+
+	decoded.close();
+	fFile.close();
+	return true;
 }

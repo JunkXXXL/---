@@ -61,7 +61,16 @@ void Set::print()
 	{
 		if (BoolVector::operator[](i)) std::cout << i;
 	}
-	std::cout << "\n";
+}
+
+std::string Set::getSymbols()
+{
+	std::string symbols;
+	for (unsigned char i = 0; i < 255; i++)
+	{
+		if (BoolVector::operator[](i)) symbols += i;
+	}
+	return symbols;
 }
 
 int Set::getPower() const

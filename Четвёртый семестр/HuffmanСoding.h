@@ -35,10 +35,12 @@ public:
 	};
 	~Huffman—oding();
 	void build();
-	int encode(std::string& filePath, std::string& name);
-	bool decode(std::string& fileName, std::string& name);
+	float encode(std::string& filePath, std::string& name);
+	bool decode(std::string& filePath, std::string& name);
+	void printTree();
 
 private:
+	void printTree(Huffman—oding::Node* root, int margin);
 	//BinaryTree tree;
 	Huffman—oding::Node* _root = nullptr;
 	int _findPosition(std::vector<Node*> keys, char symbol);
