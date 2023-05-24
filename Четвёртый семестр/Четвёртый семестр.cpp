@@ -2,6 +2,7 @@
 #include <fstream>
 #include <random>
 #include <ctime>
+#include "HuffmanСoding.h"
 
 bool createFileWithNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
@@ -249,5 +250,19 @@ int main1()
         }
     }
 
+    return 0;
+}
+
+int main()
+{
+    SetConsoleOutputCP(866);
+    setlocale(LC_ALL, "Russian");
+    std::string path = "C:\\Users\\Lsa32\\Desktop\\ANDwork\\";
+    std::string name = "HuffmanTest.txt";
+    std::string name2 = "encoded.txt";
+    HuffmanСoding code;
+    std::cout << code.encode(path, name) << '\n';
+    code.printTree();
+    std::cout << code.decode(path, name2);
     return 0;
 }

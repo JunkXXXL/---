@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Исходные файлы">
@@ -12,6 +12,9 @@
     <Filter Include="Файлы ресурсов">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="другие лабы">
+      <UniqueIdentifier>{aa5e5cb2-1eea-47ce-97ac-de54c49152a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +45,15 @@
     <ClCompile Include="SearchTreeTester.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="HuffmanСoding.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="BoolVector.cpp">
+      <Filter>другие лабы</Filter>
+    </ClCompile>
+    <ClCompile Include="set.cpp">
+      <Filter>другие лабы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
@@ -67,6 +79,15 @@
     </ClInclude>
     <ClInclude Include="SearchTreeTester.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="HuffmanСoding.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="BoolVector.h">
+      <Filter>другие лабы</Filter>
+    </ClInclude>
+    <ClInclude Include="set.h">
+      <Filter>другие лабы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

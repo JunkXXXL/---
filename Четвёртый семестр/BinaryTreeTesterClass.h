@@ -8,13 +8,13 @@ class BinaryTreeTesterClass
 
 public:
     BinaryTreeTesterClass(bool toPrint = false) { _toPrint = toPrint; };
-    ~BinaryTreeTesterClass() = default;
+    virtual ~BinaryTreeTesterClass() = default;
 
     void test(const int size, const bool toPrint);
 
 protected:
     virtual BinaryTree* allocateTree();
-    virtual void deallocateTree(BinaryTree * tree);
+    void deallocateTree(BinaryTree * tree);
     virtual void check_addAndCount(const BinaryTree & tree, const int size);
     virtual void check_remove(const BinaryTree & tree, const int size);
     virtual void check_assign(const BinaryTree& firstTree, const BinaryTree& secondTree);
@@ -24,7 +24,7 @@ private:
     void addAndCount();
     void destructor();
     void remove();
-    void clear(); //ToDo: реализовать
+    void clear();
     void assign();
     void height();
     void height_trivialCases();
