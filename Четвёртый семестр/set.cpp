@@ -172,7 +172,7 @@ std::ostream& operator<<(std::ostream& out, const Set& st)
 		out << (unsigned char)i << " " << st[i] << '\n';
 	}
 	return out;
-	// TODO: вставьте здесь оператор return
+	// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ return
 }
 
 std::istream& operator>>(std::istream& in, Set& st)

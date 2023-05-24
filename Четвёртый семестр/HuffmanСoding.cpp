@@ -144,6 +144,12 @@ std::string Huffman—oding::_getWord(char symbol)
 	return Nword;
 }
 
+
+bool comp(Huffman—oding::Node* nd1, Huffman—oding::Node* nd2)
+{
+	return nd1->getFrequency() > nd2->getFrequency();
+}
+
 int Huffman—oding::build(std::string& filePath, std::string& name)
 {
 	std::ifstream fFile(filePath + name);
@@ -195,11 +201,6 @@ int Huffman—oding::build(std::string& filePath, std::string& name)
 		keys.pop_back();
 	}
 	return letters;
-}
-
-bool comp(Huffman—oding::Node* nd1, Huffman—oding::Node* nd2)
-{
-	return nd1->getFrequency() > nd2->getFrequency();
 }
 
 float Huffman—oding::encode(std::string& filePath, std::string& name)
