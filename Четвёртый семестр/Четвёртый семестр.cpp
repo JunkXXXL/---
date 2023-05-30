@@ -258,7 +258,7 @@ int main()
     SetConsoleOutputCP(866);
     setlocale(LC_ALL, "Russian");
     std::string path = "C:\\Users\\Lsa32\\Desktop\\ANDwork\\";
-    std::string name = "HuffmanTest.txt";
+    std::string name = "HuffmanTest2.txt";
     std::string name2 = "encoded.txt";
     HuffmanСoding code;
     std::cout << code.encode(path, name) << '\n';

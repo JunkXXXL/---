@@ -63,6 +63,24 @@ Set* Huffman—oding::Node::getSymbols()
 	return _Symbols;
 }
 
+void Huffman—oding::printCode()
+{
+	if (_root != nullptr)
+	{
+		Set* symbols = _root->getLeft()->getSymbols();
+		for (int LeftRight = 0; LeftRight < 2; LeftRight++) 
+		{
+			std::string letters = symbols->getSymbols();
+			int len = letters.size();
+			for (int i = 0; i < len; i++)
+			{
+				std::cout << letters[i] << " : " << _getWord(letters[i]) << '\n';
+			}
+			symbols = _root->getRight()->getSymbols();
+		}
+	}
+}
+
 void Huffman—oding::Node::operator+=(Node* second)
 {
 	// freq = a + b - ab

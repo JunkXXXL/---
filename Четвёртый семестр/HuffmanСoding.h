@@ -9,6 +9,7 @@
 class Huffman—oding
 {
 public:
+	void printCode();
 
 	class Node
 	{
