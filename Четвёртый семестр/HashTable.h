@@ -2,6 +2,12 @@
 #include <iostream>
 #include <string>
 
+struct chain
+{
+	int* value = nullptr;
+	int* next = nullptr;
+};
+
 class HashTable
 {
 public:
@@ -18,8 +24,9 @@ public:
 	int* operator[](int el);
 
 private:
-	int** _memory = nullptr;
+	chain* _memory = nullptr;
 	int _N = 0;
+	int i = 0;
 };
 
 

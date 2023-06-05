@@ -276,6 +276,10 @@ int main()
     table.addElement(-3, 0);
     table.addElement(109, 1488);
     table.addElement(0, 6666);
+    table.addElement(10, 12345);
+
+    table.print();
+    table.deleteElement(0);
 
     table.print();
     return 0;
