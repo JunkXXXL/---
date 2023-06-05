@@ -55,7 +55,12 @@ void Huffman—oding::Node::addFrequency(int freq)
 
 int Huffman—oding::Node::getFrequency()
 {
-	return _frequency;
+	if (this != nullptr)
+	{
+		return _frequency;
+	}
+	else
+		return -1;
 }
 
 Set* Huffman—oding::Node::getSymbols()
@@ -67,38 +72,39 @@ void Huffman—oding::printCode()
 {
 	if (_root != nullptr)
 	{
-		Set* symbols = _root->getLeft()->getSymbols();
+		Set* symbols;
+		Node* nd = _root->getLeft();
 		for (int LeftRight = 0; LeftRight < 2; LeftRight++) 
 		{
-			std::string letters = symbols->getSymbols();
-			int len = letters.size();
-			for (int i = 0; i < len; i++)
+			if (nd != nullptr)
 			{
-				std::cout << letters[i] << " : " << _getWord(letters[i]) << '\n';
+				symbols = nd->getSymbols();
+				std::string letters = symbols->getSymbols();
+				int len = letters.size();
+				for (int i = 0; i < len; i++)
+				{
+					std::cout << letters[i] << " : " << _getWord(letters[i]) << '\n';
+				}
 			}
-			symbols = _root->getRight()->getSymbols();
+			nd = _root->getRight();
 		}
 	}
 }
 
 void Huffman—oding::Node::operator+=(Node* second)
 {
-	// freq = a + b - ab
-	int a = _Symbols->countWeight();
-	int b = second->_Symbols->countWeight();
-	int ab = (_Symbols->operator&(*second->_Symbols)).countWeight();
-	_frequency = a + b - ab;
+	_frequency += second->getFrequency();
 	*_Symbols = (_Symbols->operator|(*second->getSymbols()));
 }
 
 Huffman—oding::Node* Huffman—oding::Node::operator+(Node* second)
 {
-	Node* toRet = new Node(' ');
+	//Node* toRet(*this);
+	//*toRet += second;
+	//return toRet;
 
-	int a = _Symbols->countWeight();
-	int b = second->_Symbols->countWeight();
-	int ab = (_Symbols->operator&(*second->_Symbols)).countWeight();
-	toRet->_frequency = a + b - ab;
+	Node* toRet = new Node(' ');
+	toRet->_frequency = _frequency + second->getFrequency();
 	*toRet->_Symbols = (_Symbols->operator|(*second->getSymbols()));
 	toRet->_left = this;
 	toRet->_right = second;
@@ -234,8 +240,10 @@ float Huffman—oding::encode(std::string& filePath, std::string& name)
 	std::cout << _root->getLeft()->getFrequency() << " "
 		<< _root->getRight()->getFrequency();
 	std::cout << "\n";
-	_root->getLeft()->getSymbols()->print();
-	_root->getRight()->getSymbols()->print();
+	if (_root->getLeft() != nullptr)
+		_root->getLeft()->getSymbols()->print();
+	if (_root->getRight() != nullptr)
+		_root->getRight()->getSymbols()->print();
 
 	unsigned char symbol;
 	std::ifstream fFile;
@@ -252,8 +260,8 @@ float Huffman—oding::encode(std::string& filePath, std::string& name)
 	}
 	fFile.close();
 	fencode.close();
-	float koef = (float)bites / (letters * 8);
-	return koef;
+	float compressionRate = (float)bites / (letters * 8);
+	return compressionRate;
 }
 
 bool Huffman—oding::decode(std::string& filePath, std::string& name)
