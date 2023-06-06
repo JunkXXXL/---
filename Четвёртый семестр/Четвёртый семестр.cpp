@@ -259,7 +259,7 @@ int main2()
     SetConsoleOutputCP(866);
     setlocale(LC_ALL, "Russian");
     std::string path = "C:\\Users\\Lsa32\\Desktop\\ANDwork\\";
-    std::string name = "HuffmanTest.txt";
+    std::string name = "HuffmanTest3.txt";
     std::string name2 = "encoded.txt";
     HuffmanСoding code;
     std::cout << code.encode(path, name) << '\n';
@@ -272,15 +272,19 @@ int main()
 {
     HashTable table(10);
     table.addElement(4, 9999);
-    table.addElement(24, 69);
+    table.addElement(24, 65);
     table.addElement(-3, 0);
     table.addElement(109, 1488);
     table.addElement(0, 6666);
     table.addElement(10, 12345);
 
     table.print();
-    table.deleteElement(0);
+    table.deleteElement(109);
 
+    std::cout << '\n';
     table.print();
+    HashTable Tttable = table;
+    std::cout << '\n';
+    std::cout << *table[0];
     return 0;
 }
