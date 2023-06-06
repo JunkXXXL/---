@@ -9,6 +9,7 @@
 class Huffman—oding
 {
 public:
+	void printCode();
 
 	class Node
 	{
@@ -28,7 +29,7 @@ public:
 		Node* operator+(Node* second);
 
 	private:
-		Set* _Symbols;
+		Set* _Symbols = nullptr;
 		int _frequency = 1;
 		Node* _right = nullptr;
 		Node* _left = nullptr;
@@ -41,7 +42,6 @@ public:
 
 private:
 	void printTree(Huffman—oding::Node* root, int margin);
-	//BinaryTree tree;
 	Huffman—oding::Node* _root = nullptr;
 	int _findPosition(std::vector<Node*> keys, char symbol);
 	std::string _getWord(char symbol);

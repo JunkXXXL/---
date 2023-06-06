@@ -3,6 +3,7 @@
 #include <random>
 #include <ctime>
 #include "HuffmanСoding.h"
+#include "HashTable.h"
 
 bool createFileWithNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
@@ -253,7 +254,7 @@ int main1()
     return 0;
 }
 
-int main()
+int main2()
 {
     SetConsoleOutputCP(866);
     setlocale(LC_ALL, "Russian");
@@ -262,7 +263,24 @@ int main()
     std::string name2 = "encoded.txt";
     HuffmanСoding code;
     std::cout << code.encode(path, name) << '\n';
-    code.printTree();
+    code.printCode();
     std::cout << code.decode(path, name2);
+    return 0;
+}
+
+int main()
+{
+    HashTable table(10);
+    table.addElement(4, 9999);
+    table.addElement(24, 69);
+    table.addElement(-3, 0);
+    table.addElement(109, 1488);
+    table.addElement(0, 6666);
+    table.addElement(10, 12345);
+
+    table.print();
+    table.deleteElement(0);
+
+    table.print();
     return 0;
 }
