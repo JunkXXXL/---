@@ -97,8 +97,8 @@ HashTable::~HashTable()
 				delete deletePointer;
 			}
 		}
+		delete _memory;
 	}
-	_memory = nullptr;
 }
 
 bool HashTable::isFull()
