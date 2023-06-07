@@ -2,47 +2,75 @@
 
 int HashFunction(int K, int N)
 {
-	int i = 0;
-	int res = abs(K % N) + i * (1 + K % (N - 2)) % N;
-	return res;
+	int i = 1;
+	int res = ((K % N) + i * (1 + K % (N - 2))) % N;
+	return abs(res);
 }
 
 HashTable::HashTable(int len)
 {
-	if (len <= 0)
+	if (len <= 2)
 	{
-		throw "HashTable can't use len less than 1";
+		throw "HashTable can't use len less than 3";
 	}
-	_memory = new chain [len];
+	_memory = new chain[len];
 	_N = len;
 }
 
-HashTable::HashTable(HashTable& el)
+HashTable::HashTable(HashTable& other)
 {
-	_N = el._N;
-	_memory = new chain [_N];
+	_N = other._N;
+	_memory = new chain[_N];
 	for (int i = 0; i < _N; i++)
 	{
-		if (el._memory[i].value != nullptr)
+		if (other._memory[i].value != nullptr)
 		{
-			_memory[i].value = new int{ *el._memory[i].value };
-			_memory[i].next = new int{ *el._memory[i].next };
+			_memory[i].value = new int{ *other._memory[i].value };
+			_memory[i].key = new int{ *other._memory[i].key };
+
+			chain* thisPointer = _memory[i].next;
+			chain* otherPointer = other._memory[i].next;
+			while (otherPointer != nullptr)
+			{
+				thisPointer = new chain;
+				thisPointer->key = new int{ *otherPointer->key };
+				thisPointer->value = new int{ *otherPointer->value };
+				thisPointer->next = nullptr;
+
+				thisPointer = thisPointer->next;
+				otherPointer = otherPointer->next;
+			}
 		}
+		
 	}
 }
 
-HashTable HashTable::operator=(HashTable& tb)
+HashTable HashTable::operator=(HashTable& other)
 {
-	if (&tb != this)
+	if (&other != this)
 	{
 		this->~HashTable();
-		_N = tb._N;
-		_memory = new chain [_N];
+		_N = other._N;
+		_memory = new chain[_N];
 		for (int i = 0; i < _N; i++)
 		{
-			if (tb._memory[i].value != nullptr)
+			if (other._memory[i].value != nullptr)
 			{
-				_memory[i].value = new int{ *tb._memory[i].value };
+				_memory[i].value = new int{ *other._memory[i].value };
+				_memory[i].key = new int{ *other._memory[i].key };
+
+				chain* thisPointer = _memory[i].next;
+				chain* otherPointer = other._memory[i].next;
+				while (otherPointer != nullptr)
+				{
+					thisPointer = new chain;
+					thisPointer->key = new int{ *otherPointer->key };
+					thisPointer->value = new int{ *otherPointer->value };
+					thisPointer->next = nullptr;
+
+					thisPointer = thisPointer->next;
+					otherPointer = otherPointer->next;
+				}
 			}
 		}
 	}
@@ -55,12 +83,32 @@ HashTable::~HashTable()
 		for (int i = 0; i < _N; i++)
 		{
 			if (_memory[i].value != nullptr)
+			{
 				delete _memory[i].value;
-			if (_memory[i].next != nullptr)
-				delete _memory[i].next;
+				delete _memory[i].key;
+			}
+			chain* pointer = _memory[i].next;
+			while (pointer != nullptr)
+			{
+				chain* deletePointer = pointer;
+				pointer = pointer->next;
+				delete deletePointer->value;
+				delete deletePointer->key;
+				delete deletePointer;
+			}
 		}
 		delete _memory;
 	}
+}
+
+bool HashTable::isFull()
+{
+	for (int i = 0; i < _N; i++)
+	{
+		if (_memory[i].value == nullptr)
+			return false;
+	}
+	return true;
 }
 
 bool HashTable::isExist(int position)
@@ -81,23 +129,23 @@ bool HashTable::addElement(int key, int value)
 	if (!isExist(position))
 	{
 		_memory[position].value = new int{ value };
+		_memory[position].key = new int{ key };
 		return true;
 	}
-	else 
+	else
 	{
-		int pos = position;
-		while (_memory[pos].next != nullptr)
-			pos = *_memory[pos].next;
-
-		for (int i = 0; i < _N; i++)
-		{
-			if (_memory[i].value == nullptr)
-			{
-				_memory[i].value = new int{ value };
-				_memory[position].next = new int{ i };
-				return true;
-			}
+		chain* pointer = _memory[position].next;
+		chain* prev = &_memory[position];
+		while (pointer != nullptr) {
+			prev = pointer;
+			pointer = pointer->next;
 		}
+		
+		prev->next = new chain;
+		pointer = prev->next;
+		pointer->key = new int{ key };
+		pointer->value = new int{ value };
+		return true;
 	}
 
 	return false;
@@ -108,17 +156,34 @@ bool HashTable::deleteElement(int key)
 	int position = HashFunction(key, _N);
 	if (isExist(position))
 	{
-		delete _memory[position].value;
-		_memory[position].value = nullptr;
-		
-		int pos = position;
-		while (_memory[pos].next != nullptr)
+		chain* pointer = &_memory[position];
+		chain* prePointer = pointer;
+
+		while (*pointer->key != key)
 		{
-			_memory[pos].value = _memory[*_memory[pos].next].value;
-			pos = *_memory[pos].next;
+			if (pointer->next != nullptr) 
+			{
+				prePointer = pointer;
+				pointer = pointer->next;
+			}
+			else
+				return false;
 		}
 
-		_memory[pos].value = nullptr;
+		if (prePointer == pointer)
+		{
+			delete pointer->value;
+			delete pointer->key;
+			_memory[position] = *_memory[position].next;
+		}
+		else
+		{
+			prePointer->next = pointer->next;
+
+			delete pointer->value;
+			delete pointer->key;
+			delete pointer;
+		}
 		return true;
 	}
 	return false;
@@ -128,15 +193,35 @@ void HashTable::print()
 {
 	for (int i = 0; i < _N; i++)
 	{
-		if (_memory[i].value != nullptr)
-			std::cout << i << " : " << *_memory[i].value << '\n';
-		else
-			std::cout << i << " : " << " \n";
+		if (_memory[i].value != nullptr) {
+			std::cout << HashFunction(i, _N) << " => " 
+				<< *_memory[i].key << " : " << *_memory[i].value;
+			chain* pointer = _memory[i].next;
+			while (pointer != nullptr)
+			{
+				std::cout << " -> " << *pointer->key << " : " << *pointer->value;
+				pointer = pointer->next;
+			}
+			std::cout << '\n';
+		}
 	}
 }
 
-int* HashTable::operator[](int el)
+int& HashTable::operator[](int key)
 {
-	int position = HashFunction(el, _N);
-	return _memory[position].value;
+	int position = HashFunction(key, _N);
+	if (_memory[position].value == nullptr)
+		throw "key is not found";
+	if (*_memory[position].key == key)
+		return *_memory[position].value;
+
+	chain* pointer = _memory[position].next;
+	while (pointer != nullptr)
+	{
+		if (*pointer->key == key)
+			return *pointer->value;
+		pointer = pointer->next;
+	}
+
+	throw "key is not found";
 }
