@@ -23,7 +23,7 @@ public:
 	bool isFull();
 	void print();
 	HashTable operator=(HashTable& tb);
-	int* operator[](int el);
+	int& operator[](int el);
 
 private:
 	chain* _memory = nullptr;

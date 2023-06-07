@@ -279,12 +279,14 @@ int main()
     table.addElement(10, 12345);
 
     table.print();
-    table.deleteElement(109);
+    table.deleteElement(-3);
 
     std::cout << '\n';
     table.print();
     HashTable Tttable = table;
     std::cout << '\n';
-    std::cout << *table[0];
+    std::cout << table[109] << ' ';
+    table[109] = 209;
+    std::cout << table[109];
     return 0;
 }

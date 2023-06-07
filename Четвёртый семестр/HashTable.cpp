@@ -194,35 +194,34 @@ void HashTable::print()
 	for (int i = 0; i < _N; i++)
 	{
 		if (_memory[i].value != nullptr) {
-			std::cout << *_memory[i].key << " : " << *_memory[i].value;
+			std::cout << HashFunction(i, _N) << " => " 
+				<< *_memory[i].key << " : " << *_memory[i].value;
 			chain* pointer = _memory[i].next;
 			while (pointer != nullptr)
 			{
 				std::cout << " -> " << *pointer->key << " : " << *pointer->value;
 				pointer = pointer->next;
 			}
+			std::cout << '\n';
 		}
-		else
-			std::cout << " : ";
-		std::cout << '\n';
 	}
 }
 
-int* HashTable::operator[](int key)
+int& HashTable::operator[](int key)
 {
 	int position = HashFunction(key, _N);
 	if (_memory[position].value == nullptr)
-		return nullptr;
+		throw "key is not found";
 	if (*_memory[position].key == key)
-		return _memory[position].value;
+		return *_memory[position].value;
 
-	chain* pointer = &_memory[position];
-	while (pointer->next != nullptr)
+	chain* pointer = _memory[position].next;
+	while (pointer != nullptr)
 	{
 		if (*pointer->key == key)
-			return pointer->value;
+			return *pointer->value;
 		pointer = pointer->next;
 	}
 
-	return nullptr;
+	throw "key is not found";
 }
