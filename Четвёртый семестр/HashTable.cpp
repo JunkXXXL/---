@@ -49,7 +49,7 @@ HashTable HashTable::operator=(HashTable& other)
 {
 	if (&other != this)
 	{
-		this->~HashTable();
+		clear();
 		_N = other._N;
 		_memory = new chain[_N];
 		for (int i = 0; i < _N; i++)
@@ -99,6 +99,31 @@ HashTable::~HashTable()
 		}
 		delete _memory;
 	}
+}
+
+void HashTable::clear()
+{
+	if (_memory != nullptr) {
+		for (int i = 0; i < _N; i++)
+		{
+			if (_memory[i].value != nullptr)
+			{
+				delete _memory[i].value;
+				delete _memory[i].key;
+			}
+			chain* pointer = _memory[i].next;
+			while (pointer != nullptr)
+			{
+				chain* deletePointer = pointer;
+				pointer = pointer->next;
+				delete deletePointer->value;
+				delete deletePointer->key;
+				delete deletePointer;
+			}
+		}
+		delete _memory;
+	}
+	_memory = nullptr;
 }
 
 bool HashTable::isFull()
