@@ -145,6 +145,7 @@
     <ClCompile Include="BinaryTreeTesterClass.cpp" />
     <ClCompile Include="BoolVector.cpp" />
     <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="HashTableTester.cpp" />
     <ClCompile Include="HuffmanСoding.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="SearchTree.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="BinaryTreeTesterClass.h" />
     <ClInclude Include="BoolVector.h" />
     <ClInclude Include="HashTable.h" />
+    <ClInclude Include="HashTableTester.h" />
     <ClInclude Include="HuffmanСoding.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="Node.h" />

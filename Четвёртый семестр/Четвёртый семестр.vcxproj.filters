@@ -57,6 +57,9 @@
     <ClCompile Include="HashTable.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="HashTableTester.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
@@ -93,6 +96,9 @@
       <Filter>другие лабы</Filter>
     </ClInclude>
     <ClInclude Include="HashTable.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableTester.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

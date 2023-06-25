@@ -19,13 +19,14 @@ public:
 
 	bool addElement(int key, int value);
 	bool deleteElement(int key);
-	bool isExist(int position);
 	bool isFull();
 	void print();
 	HashTable operator=(HashTable& tb);
 	int& operator[](int el);
 
 private:
+	void clear();
+	bool isExist(int position);
 	chain* _memory = nullptr;
 	int _N = 0;
 };

@@ -28,20 +28,20 @@ HashTable::HashTable(HashTable& other)
 			_memory[i].value = new int{ *other._memory[i].value };
 			_memory[i].key = new int{ *other._memory[i].key };
 
-			chain* thisPointer = _memory[i].next;
-			chain* otherPointer = other._memory[i].next;
-			while (otherPointer != nullptr)
+			chain* thisPointer = &_memory[i];
+			chain* otherPointer = &other._memory[i];
+			while (otherPointer->next != nullptr)
 			{
-				thisPointer = new chain;
-				thisPointer->key = new int{ *otherPointer->key };
-				thisPointer->value = new int{ *otherPointer->value };
-				thisPointer->next = nullptr;
+				thisPointer->next = new chain;
 
 				thisPointer = thisPointer->next;
 				otherPointer = otherPointer->next;
+
+				thisPointer->key = new int{ *otherPointer->key };
+				thisPointer->value = new int{ *otherPointer->value };
+				thisPointer->next = nullptr;
 			}
 		}
-		
 	}
 }
 
@@ -49,7 +49,7 @@ HashTable HashTable::operator=(HashTable& other)
 {
 	if (&other != this)
 	{
-		this->~HashTable();
+		clear();
 		_N = other._N;
 		_memory = new chain[_N];
 		for (int i = 0; i < _N; i++)
@@ -59,17 +59,18 @@ HashTable HashTable::operator=(HashTable& other)
 				_memory[i].value = new int{ *other._memory[i].value };
 				_memory[i].key = new int{ *other._memory[i].key };
 
-				chain* thisPointer = _memory[i].next;
-				chain* otherPointer = other._memory[i].next;
-				while (otherPointer != nullptr)
+				chain* thisPointer = &_memory[i];
+				chain* otherPointer = &other._memory[i];
+				while (otherPointer->next != nullptr)
 				{
-					thisPointer = new chain;
-					thisPointer->key = new int{ *otherPointer->key };
-					thisPointer->value = new int{ *otherPointer->value };
-					thisPointer->next = nullptr;
+					thisPointer->next = new chain;
 
 					thisPointer = thisPointer->next;
 					otherPointer = otherPointer->next;
+
+					thisPointer->key = new int{ *otherPointer->key };
+					thisPointer->value = new int{ *otherPointer->value };
+					thisPointer->next = nullptr;
 				}
 			}
 		}
@@ -99,6 +100,31 @@ HashTable::~HashTable()
 		}
 		delete _memory;
 	}
+}
+
+void HashTable::clear()
+{
+	if (_memory != nullptr) {
+		for (int i = 0; i < _N; i++)
+		{
+			if (_memory[i].value != nullptr)
+			{
+				delete _memory[i].value;
+				delete _memory[i].key;
+			}
+			chain* pointer = _memory[i].next;
+			while (pointer != nullptr)
+			{
+				chain* deletePointer = pointer;
+				pointer = pointer->next;
+				delete deletePointer->value;
+				delete deletePointer->key;
+				delete deletePointer;
+			}
+		}
+		delete _memory;
+	}
+	_memory = nullptr;
 }
 
 bool HashTable::isFull()
@@ -174,7 +200,8 @@ bool HashTable::deleteElement(int key)
 		{
 			delete pointer->value;
 			delete pointer->key;
-			_memory[position] = *_memory[position].next;
+			_memory[position].key = nullptr;
+			_memory[position].value = nullptr;
 		}
 		else
 		{
