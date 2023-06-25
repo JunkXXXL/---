@@ -28,20 +28,20 @@ HashTable::HashTable(HashTable& other)
 			_memory[i].value = new int{ *other._memory[i].value };
 			_memory[i].key = new int{ *other._memory[i].key };
 
-			chain* thisPointer = _memory[i].next;
-			chain* otherPointer = other._memory[i].next;
-			while (otherPointer != nullptr)
+			chain* thisPointer = &_memory[i];
+			chain* otherPointer = &other._memory[i];
+			while (otherPointer->next != nullptr)
 			{
-				thisPointer = new chain;
-				thisPointer->key = new int{ *otherPointer->key };
-				thisPointer->value = new int{ *otherPointer->value };
-				thisPointer->next = nullptr;
+				thisPointer->next = new chain;
 
 				thisPointer = thisPointer->next;
 				otherPointer = otherPointer->next;
+
+				thisPointer->key = new int{ *otherPointer->key };
+				thisPointer->value = new int{ *otherPointer->value };
+				thisPointer->next = nullptr;
 			}
 		}
-		
 	}
 }
 
@@ -59,17 +59,18 @@ HashTable HashTable::operator=(HashTable& other)
 				_memory[i].value = new int{ *other._memory[i].value };
 				_memory[i].key = new int{ *other._memory[i].key };
 
-				chain* thisPointer = _memory[i].next;
-				chain* otherPointer = other._memory[i].next;
-				while (otherPointer != nullptr)
+				chain* thisPointer = &_memory[i];
+				chain* otherPointer = &other._memory[i];
+				while (otherPointer->next != nullptr)
 				{
-					thisPointer = new chain;
-					thisPointer->key = new int{ *otherPointer->key };
-					thisPointer->value = new int{ *otherPointer->value };
-					thisPointer->next = nullptr;
+					thisPointer->next = new chain;
 
 					thisPointer = thisPointer->next;
 					otherPointer = otherPointer->next;
+
+					thisPointer->key = new int{ *otherPointer->key };
+					thisPointer->value = new int{ *otherPointer->value };
+					thisPointer->next = nullptr;
 				}
 			}
 		}
@@ -199,7 +200,8 @@ bool HashTable::deleteElement(int key)
 		{
 			delete pointer->value;
 			delete pointer->key;
-			_memory[position] = *_memory[position].next;
+			_memory[position].key = nullptr;
+			_memory[position].value = nullptr;
 		}
 		else
 		{
