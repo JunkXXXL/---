@@ -11,10 +11,10 @@ class SearchTree: public BinaryTree
 		Node* _getMinKey(Node* node);
 
 	public:
-		SearchTree() { _root = new Node(0); }
-		SearchTree(const SearchTree& tree);
-		SearchTree(Node* node);
-		SearchTree(int key) { _root = new Node(key); }
+		SearchTree() {};
+		SearchTree(const SearchTree& tree) : BinaryTree(tree) {};
+		SearchTree(Node* node) : BinaryTree(node) {};
+		SearchTree(int key) : BinaryTree(key) {};
 
 		void addNode(int key) override;
 		bool deleteNode(int key) override;

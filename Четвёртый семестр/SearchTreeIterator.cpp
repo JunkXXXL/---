@@ -7,6 +7,15 @@ SearchTreeIterator::SearchTreeIterator(const SearchTree* tree)
 	moveToNext();
 }
 
+SearchTreeIterator::~SearchTreeIterator()
+{
+	Node* pointer = nullptr;
+	while (!_nodeStack.empty())
+	{
+		_nodeStack.pop();
+	}
+}
+
 SearchTreeIterator::SearchTreeIterator(SearchTree* tree)
 {
 	_tree = tree->getRoot();

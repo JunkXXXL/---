@@ -14,9 +14,12 @@ void BinaryTreeTesterClass::test(const int size, const bool toPrint)
     std::cout << "height check ended, wait...";
     getchar();//
     destructor();
+    std::cout << "destructor check ended, wait...";
+    getchar();//
     clear();
-    for (int i = 0; i < 10; i++)
-        remove();
+    std::cout << "clear check ended, wait...";
+    getchar();//
+    remove();
     std::cout << "remove check ended, wait...";
     getchar();
 }
@@ -60,9 +63,6 @@ void BinaryTreeTesterClass::destructor()
         }
         deallocateTree(tree);
     }
-
-    std::cout << "wait...";
-    getchar();
 }
 
 void BinaryTreeTesterClass::remove()

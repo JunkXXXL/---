@@ -8,7 +8,7 @@ class SearchTreeIterator: public Iterator
 public:
     SearchTreeIterator(const SearchTree * tree);
     SearchTreeIterator(SearchTree * tree);
-    ~SearchTreeIterator() override = default;
+    ~SearchTreeIterator() override;
 
     bool exists() const override;
     int value() const override;

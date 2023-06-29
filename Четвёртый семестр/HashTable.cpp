@@ -17,6 +17,12 @@ HashTable::HashTable(int len)
 	_N = len;
 }
 
+HashTable::HashTable()
+{
+	_N = 3;
+	_memory = new chain[3];
+}
+
 HashTable::HashTable(HashTable& other)
 {
 	_N = other._N;
@@ -158,11 +164,17 @@ bool HashTable::addElement(int key, int value)
 		_memory[position].key = new int{ key };
 		return true;
 	}
+	else if (_getElement(key) != nullptr)
+	{
+		return false;
+	}
 	else
 	{
 		chain* pointer = _memory[position].next;
 		chain* prev = &_memory[position];
 		while (pointer != nullptr) {
+			if (*pointer->key == key)
+				return false;
 			prev = pointer;
 			pointer = pointer->next;
 		}
@@ -252,3 +264,23 @@ int& HashTable::operator[](int key)
 
 	throw "key is not found";
 }
+
+const chain* HashTable::_getElement(int key)
+{
+	int position = HashFunction(key, _N);
+	if (_memory[position].value == nullptr)
+		return nullptr;
+	if (*_memory[position].key == key)
+		return &_memory[position];
+
+	chain* pointer = _memory[position].next;
+	while (pointer != nullptr)
+	{
+		if (*pointer->key == key)
+			return pointer;
+		pointer = pointer->next;
+	}
+
+	return nullptr;
+}
+

@@ -60,6 +60,7 @@ bool SearchTree::deleteNode(int key)
 				parent->left = nullptr;
 			else
 				parent->right = nullptr;
+			delete runner;
 		}
 		else
 		{
@@ -81,25 +82,14 @@ bool SearchTree::deleteNode(int key)
 		if (parent != nullptr)
 		{
 			if (runner->left != nullptr && parent->left == runner)
-			{
 				parent->left = runner->left;
-				delete runner;
-			}
 			else if (runner->left != nullptr && parent->right == runner)
-			{
 				parent->right = runner->left;
-				delete runner;
-			}
 			else if (runner->right != nullptr && parent->left == runner)
-			{
 				parent->left = runner->right;
-				delete runner;
-			}
 			else
-			{
 				parent->right = runner->right;
-				delete runner;
-			}
+			delete runner;
 			return true;
 		}
 		else
@@ -114,20 +104,11 @@ bool SearchTree::deleteNode(int key)
 				_root = runner->right;
 				delete runner;
 			}
+			return true;
 		}
 	}
 
 	return false;
-}
-
-SearchTree::SearchTree(const SearchTree& tree)
-{
-	_root = new Node(tree._root);
-}
-
-SearchTree::SearchTree(Node* node)
-{
-	_root = node;
 }
 
 void SearchTree::addNode(int key, Node* node)
@@ -384,23 +365,4 @@ SearchTree SearchTree::optimalTree(int len, std::vector<int> keys, std::vector<i
 	Tree._root = _createOptimalTree(frequency, R, 0, len - 1);
 
 	return Tree;
-}
-
-int main14()
-{
-	std::vector<int> p;
-	p.push_back(-1); p.push_back(2); p.push_back(1);
-	p.push_back(1); p.push_back(5);
-	std::vector<int> q;
-	q.push_back(1); q.push_back(10); q.push_back(1);
-	q.push_back(1); q.push_back(10);
-	std::vector<int> frequency;
-	frequency.push_back(0); frequency.push_back(10);
-	frequency.push_back(20); frequency.push_back(30);
-	frequency.push_back(40);
-
-	SearchTree Tree = SearchTree::optimalTree(5, p, frequency, q);
-
-	Tree.print();
-	return 0;
 }

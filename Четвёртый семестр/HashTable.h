@@ -12,7 +12,7 @@ struct chain
 class HashTable
 {
 public:
-	HashTable() {};
+	HashTable();
 	HashTable(int len);
 	HashTable(HashTable& el);
 	~HashTable();
@@ -23,12 +23,15 @@ public:
 	void print();
 	HashTable operator=(HashTable& tb);
 	int& operator[](int el);
+	friend class HashTableTester;
 
 private:
 	void clear();
 	bool isExist(int position);
 	chain* _memory = nullptr;
 	int _N = 0;
+
+	const chain* _getElement(int el);
 };
 
 

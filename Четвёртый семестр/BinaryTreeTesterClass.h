@@ -1,5 +1,6 @@
 #pragma once
 #include "BinaryTree.h"
+#include "SearchTree.h"
 #include <assert.h>
 #include <time.h>
 

@@ -323,8 +323,11 @@ bool BinaryTree::_instructionToDeleteRootWithOneChild(const Node* node, BinaryTr
 
 void BinaryTree::print() const
 {
-	print(_root, 1, 3);
-	std::cout << "\n";
+	if (_root != nullptr)
+	{
+		print(_root, 1, 3);
+		std::cout << "\n";
+	}
 }
 
 bool BinaryTree::deleteNode(int key)
@@ -405,12 +408,12 @@ Node* BinaryTree::getRoot() const
 
 void BinaryTree::clear() //clear
 {
+	if (_root == nullptr) return;
 	clear(_root);
 }
 
 void BinaryTree::clear(Node* node)
 {
-	if (_root == nullptr) return;
 	if (node->left != nullptr)
 	{
 		clear(node->left);

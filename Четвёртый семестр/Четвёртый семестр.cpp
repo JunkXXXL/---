@@ -1,10 +1,14 @@
-﻿#include <iostream>
+﻿#pragma once
+#include <iostream>
 #include <fstream>
 #include <random>
 #include <ctime>
 #include "HuffmanСoding.h"
 #include "HashTable.h"
 #include "HashTableTester.h"
+#include "BinaryTreeIterator.h"
+#include "BinaryTreeTesterClass.h"
+#include "SearchTreeTester.h"
 
 bool createFileWithNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue)
 {
@@ -255,7 +259,7 @@ int main1()
     return 0;
 }
 
-int main2()
+int HuffmanTests()
 {
     SetConsoleOutputCP(866);
     setlocale(LC_ALL, "Russian");
@@ -269,34 +273,25 @@ int main2()
     return 0;
 }
 
-int main3()
+int HashTableTest()
 {
-    HashTable table(10);
-    table.addElement(4, 9999);
-    table.addElement(24, 65);
-    table.addElement(-3, 0);
-    table.addElement(109, 1488);
-    table.addElement(0, 6666);
-    table.addElement(10, 12345);
+    HashTable table;
+    table.addElement(1, 10);
+    HashTableTester tester;
+    tester.test(10, true);
+    return 0;
+}
 
-    table.print();
-    table.deleteElement(-3);
-
-    std::cout << '\n';
-    table.print();
-    HashTable Tttable = table;
-    std::cout << '\n';
-
-    std::cout << table[109] << ' ';
-    table[109] = 209;
-    std::cout << table[109] << '\n';
-
-    
+//Search Tree
+int SearchTreeTest()
+{
+    SearchTreeTester tst(false);
+    tst.test(5, false);
     return 0;
 }
 
 int main()
 {
-    HashTableTester tester;
-    tester.test(10, true);
+    HashTableTest();
+    //SearchTreeTest();
 }
